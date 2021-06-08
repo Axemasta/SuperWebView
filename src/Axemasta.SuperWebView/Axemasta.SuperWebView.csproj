@@ -1,13 +1,60 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="MSBuild.Sdk.Extras/3.0.23">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;Xamarin.iOS10;MonoAndroid10.0;</TargetFrameworks>
+    <Configurations>Debug;Release</Configurations>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
-  <ItemGroup>
+  <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">
+    <!-- Manage TargetFrameworks for development (Debug Mode) -->
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+    
+  <PropertyGroup Condition=" '$(Configuration)'=='Release' ">
+    <!-- Manage TargetFrameworks for distribution (Release Mode) -->
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <NoWarn>1701;1702;CS1998</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(Configuration)'=='Debug' ">
+    <!-- Manage Xamarin.Forms version for development -->
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Internals\" />
+
+  <ItemGroup Condition=" '$(Configuration)'=='Release' ">
+    <!-- Manage Xamarin.Forms version for distribution -->
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Build.TypeRedirector" Version="0.1.2-preview" PrivateAssets="all" />
+    <Compile Include="**/*.shared.cs" />
+    <Compile Include="**/*.shared.*.cs" />
+    <Compile Include="SuperWebViewSourceTypeConverter.cs">
+      <SubType></SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.0')) ">
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('MonoAndroid')) ">
+    <Compile Include="**\*.android.cs" />
+    <Compile Include="**\*.android.*.cs" />
+    <!--Resources-->
+    <AndroidResource Include="Resources\**\*.axml" />
+    <AndroidResource Include="Resources\**\*.xml" />
+    <AndroidResource Include="Resources\**\*.png" />
+  </ItemGroup>
+    
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
+    <Compile Include="**\*.ios.cs" />
+    <Compile Include="**\*.ios.*.cs" />
+  </ItemGroup>
+
 </Project>

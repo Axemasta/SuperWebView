@@ -1,7 +1,7 @@
 # Super Web View
 A drop in replacement for WebView in Xamarin Forms.
 
-I created this control to better fulfill my own requirements for a web browsing component on Xamarin Forms. This control allows for the following features:
+I created this control to better fulfill my own requirements for a web browsing component on Xamarin Forms. This control is a direct fork of the Xamarin control, I have extensively used code form the Xamarin Forms repository to create this library. Unfortunately due to encapsulation certain things required large chunks of code to be pulled out of Xamarin in order to get this control to function exactly like its Forms counterpart.
 
 ## Better Navigation
 

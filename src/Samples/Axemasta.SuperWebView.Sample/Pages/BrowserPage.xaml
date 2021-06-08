@@ -11,7 +11,7 @@
                 <Label Text="SuperWebView Sample" FontSize="Title" HorizontalTextAlignment="Center"/>
             </Frame>
 
-            <super:LegacySuperWebView Source="https://www.google.co.uk" Grid.Row="1"/>
+            <super:SuperWebView x:Name="superWebView" Grid.Row="1"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

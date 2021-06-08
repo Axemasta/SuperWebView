@@ -1,10 +1,6 @@
-﻿using System;
-namespace Axemasta.SuperWebView.Internals
+﻿namespace Axemasta.SuperWebView.Internals
 {
-    public class RendererRegistry
-    {
-        public RendererRegistry()
-        {
-        }
-    }
+    internal class _SuperWebViewRenderer
+	{
+	}
 }

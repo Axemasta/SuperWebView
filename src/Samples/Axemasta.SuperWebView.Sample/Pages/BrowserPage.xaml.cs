@@ -10,6 +10,8 @@ namespace Axemasta.SuperWebView.Sample.Pages
         public BrowserPage()
         {
             InitializeComponent();
+
+            superWebView.Source = "https://www.google.co.uk";
         }
     }
 }
