@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:super="clr-namespace:Axemasta.SuperWebView;assembly=Axemasta.SuperWebView"
+    x:Class="Axemasta.SuperWebView.Sample.Pages.BrowserPage">
+    <ContentPage.Content>
+        <Grid RowDefinitions="Auto, *">
+
+            <Frame Padding="20" BackgroundColor="Orange" CornerRadius="0" HasShadow="False">
+                <Label Text="SuperWebView Sample" FontSize="Title" HorizontalTextAlignment="Center"/>
+            </Frame>
+
+            <super:SuperWebView Source="https://www.google.co.uk" Grid.Row="1"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
