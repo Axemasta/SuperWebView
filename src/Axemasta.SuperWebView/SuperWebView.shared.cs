@@ -10,14 +10,9 @@ using Xamarin.Forms.Internals;
 
 namespace Axemasta.SuperWebView
 {
-    /// <summary>
-    /// Super Web View Cross Platform Control
+	/// <summary>
+    /// Super Web View
     /// </summary>
-    public class LegacySuperWebView : WebView
-    {
-        // Placeholder until I get renderer working
-    }
-
     [RenderWith(typeof(_SuperWebViewRenderer))]
     public class SuperWebView : View, ISuperWebViewController, IElementConfiguration<SuperWebView>
     {

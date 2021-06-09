@@ -33,9 +33,6 @@
     <PackageReference Include="Xamarin.Build.TypeRedirector" Version="0.1.2-preview" PrivateAssets="all" />
     <Compile Include="**/*.shared.cs" />
     <Compile Include="**/*.shared.*.cs" />
-    <Compile Include="SuperWebViewSourceTypeConverter.cs">
-      <SubType></SubType>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard2.0')) ">
@@ -55,6 +52,13 @@
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
     <Compile Include="**\*.ios.cs" />
     <Compile Include="**\*.ios.*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Renderers\" />
+    <Folder Include="Models\" />
+    <Folder Include="Converters\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 </Project>
