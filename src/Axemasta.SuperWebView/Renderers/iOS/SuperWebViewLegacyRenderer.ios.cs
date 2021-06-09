@@ -7,7 +7,7 @@ using Xamarin.Forms.Platform.iOS;
 
 namespace Axemasta.SuperWebView.iOS
 {
-	public class SuperWebViewLegacyRenderer : ViewRenderer<SuperWebView, WKWebView>
+	internal class SuperWebViewLegacyRenderer : ViewRenderer<SuperWebView, WKWebView>
 	{
 		private WKWebView _wkWebView;
 

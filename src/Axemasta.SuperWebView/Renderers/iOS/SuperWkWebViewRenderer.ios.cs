@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Drawing;
+using System.Threading.Tasks;
 using Axemasta.SuperWebView;
 using Axemasta.SuperWebView.Internals;
 using Foundation;
@@ -9,27 +9,33 @@ using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.iOS;
 using PreserveAttribute = Foundation.PreserveAttribute;
+using RectangleF = System.Drawing.RectangleF;
 
 namespace Axemasta.SuperWebView.iOS
 {
-    public class Benched_SuperWebViewRenderer : WKWebView, IVisualElementRenderer, IWebViewDelegate, IEffectControlProvider, ITabStop
+    public class SuperWkWebViewRenderer : WKWebView, IVisualElementRenderer, IWebViewDelegate, IEffectControlProvider, ITabStop
 	{
-		static WKProcessPool _sharedPool;
+        //TODO: Fix violation of encapsulation
+        public bool _ignoreSourceChanges;
+        public WebNavigationEvent _lastBackForwardEvent;
 
 		[Preserve(Conditional = true)]
-		public Benched_SuperWebViewRenderer() : this(CreateConfiguration())
+		public SuperWkWebViewRenderer()
+            : this(WKWebViewHelper.CreatedPooledConfiguration())
 		{
 
 		}
 
 		[Preserve(Conditional = true)]
-		public Benched_SuperWebViewRenderer(WKWebViewConfiguration config)
+		public SuperWkWebViewRenderer(WKWebViewConfiguration config)
 			: base(RectangleF.Empty, config)
 		{
 
 		}
 
-        public VisualElement Element => throw new NotImplementedException();
+        public WebView WebView => Element as WebView;
+
+        public VisualElement Element { get; private set; }
 
         public UIView NativeView => throw new NotImplementedException();
 
@@ -38,25 +44,6 @@ namespace Axemasta.SuperWebView.iOS
         public UIView TabStop => throw new NotImplementedException();
 
         public event EventHandler<VisualElementChangedEventArgs> ElementChanged;
-
-        // https://developer.apple.com/forums/thread/99674
-        // WKWebView and making sure cookies synchronize is really quirky
-        // The main workaround I've found for ensuring that cookies synchronize 
-        // is to share the Process Pool between all WkWebView instances.
-        // It also has to be shared at the point you call init
-        static WKWebViewConfiguration CreateConfiguration()
-		{
-			var config = new WKWebViewConfiguration();
-			if (_sharedPool == null)
-			{
-				_sharedPool = config.ProcessPool;
-			}
-			else
-			{
-				config.ProcessPool = _sharedPool;
-			}
-			return config;
-		}
 
         public SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
         {
@@ -86,6 +73,22 @@ namespace Axemasta.SuperWebView.iOS
         public void SetElementSize(Xamarin.Forms.Size size)
         {
             throw new NotImplementedException();
+        }
+
+        public void UpdateCanGoBackForward()
+        {
+            ((IWebViewController)WebView).CanGoBack = CanGoBack;
+            ((IWebViewController)WebView).CanGoForward = CanGoForward;
+        }
+
+        public async Task SyncNativeCookies(string url)
+        {
+
+        }
+
+        public async Task SyncNativeCookiesToElement(string url)
+        {
+
         }
     }
 }
