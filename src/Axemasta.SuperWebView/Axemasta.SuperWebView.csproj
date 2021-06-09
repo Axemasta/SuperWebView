@@ -54,11 +54,4 @@
     <Compile Include="**\*.ios.*.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Renderers\" />
-    <Folder Include="Models\" />
-    <Folder Include="Converters\" />
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-
 </Project>

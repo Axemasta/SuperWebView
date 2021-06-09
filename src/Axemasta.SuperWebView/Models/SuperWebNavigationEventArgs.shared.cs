@@ -5,7 +5,7 @@ namespace Axemasta.SuperWebView
 {
     public class SuperWebNavigationEventArgs
     {
-		protected SuperWebNavigationEventArgs(WebNavigationEvent navigationEvent, WebViewSource source, string url)
+		protected SuperWebNavigationEventArgs(WebNavigationEvent navigationEvent, SuperWebViewSource source, string url)
 		{
 			NavigationEvent = navigationEvent;
 			Source = source;
@@ -14,7 +14,7 @@ namespace Axemasta.SuperWebView
 
 		public WebNavigationEvent NavigationEvent { get; internal set; }
 
-		public WebViewSource Source { get; internal set; }
+		public SuperWebViewSource Source { get; internal set; }
 
 		public string Url { get; internal set; }
 	}

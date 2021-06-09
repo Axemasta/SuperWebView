@@ -10,7 +10,7 @@ using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.iOS;
 using PreserveAttribute = Foundation.PreserveAttribute;
 
-namespace Axemasta.SuperWebView
+namespace Axemasta.SuperWebView.iOS
 {
     public class Benched_SuperWebViewRenderer : WKWebView, IVisualElementRenderer, IWebViewDelegate, IEffectControlProvider, ITabStop
 	{

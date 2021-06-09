@@ -1,9 +1,10 @@
 ﻿using System;
+using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
 namespace Axemasta.SuperWebView
 {
-    public interface ISuperWebViewController
+    public interface ISuperWebViewController : IViewController
     {
 		bool CanGoBack { get; set; }
 		bool CanGoForward { get; set; }
