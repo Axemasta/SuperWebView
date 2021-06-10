@@ -36,5 +36,11 @@ namespace Axemasta.SuperWebView.iOS
 
             return config;
         }
+
+        public static void DisposeSharedPool()
+        {
+            _sharedPool.Dispose();
+            _sharedPool = null;
+        }
     }
 }

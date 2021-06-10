@@ -19,12 +19,12 @@ namespace Axemasta.SuperWebView.Sample.Pages
 
         private void OnNavigating(object sender, SuperWebNavigatingEventArgs e)
         {
-            Debug.WriteLine("OnNavigating Fired");
+            Debug.WriteLine($"OnNavigating Fired - {e.Url}");
         }
 
         private void OnNavigated(object sender, SuperWebNavigatedEventArgs e)
         {
-            Debug.WriteLine("OnNavigated Fired");
+            Debug.WriteLine($"OnNavigated Fired - {e.Url}");
         }
     }
 }

@@ -20,13 +20,13 @@ namespace Axemasta.SuperWebView.iOS
 			_renderer = renderer;
 		}
 
-		WebView WebView => _renderer.WebView;
+		SuperWebView WebView => _renderer.WebView;
 
 		public override void DidFailNavigation(WKWebView webView, WKNavigation navigation, NSError error)
 		{
 			var url = GetCurrentUrl();
 			WebView.SendNavigated(
-				new WebNavigatedEventArgs(_lastEvent, new UrlWebViewSource { Url = url }, url, WebNavigationResult.Failure)
+				new SuperWebNavigatedEventArgs(_lastEvent, new SuperUrlWebViewSource { Url = url }, url, WebNavigationResult.Failure)
 			);
 
 			_renderer.UpdateCanGoBackForward();
@@ -36,7 +36,7 @@ namespace Axemasta.SuperWebView.iOS
 		{
 			var url = GetCurrentUrl();
 			WebView.SendNavigated(
-				new WebNavigatedEventArgs(_lastEvent, new UrlWebViewSource { Url = url }, url, WebNavigationResult.Failure)
+				new SuperWebNavigatedEventArgs(_lastEvent, new SuperUrlWebViewSource { Url = url }, url, WebNavigationResult.Failure)
 			);
 
 			_renderer.UpdateCanGoBackForward();
@@ -52,7 +52,7 @@ namespace Axemasta.SuperWebView.iOS
 				return;
 
 			_renderer._ignoreSourceChanges = true;
-			WebView.SetValueFromRenderer(WebView.SourceProperty, new UrlWebViewSource { Url = url });
+			WebView.SetValueFromRenderer(SuperWebView.SourceProperty, new SuperUrlWebViewSource { Url = url });
 			_renderer._ignoreSourceChanges = false;
 			ProcessNavigated(url);
 		}
@@ -69,7 +69,7 @@ namespace Axemasta.SuperWebView.iOS
 				Log.Warning(nameof(SuperWkWebViewRenderer), $"Failed to Sync Cookies {exc}");
 			}
 
-			var args = new WebNavigatedEventArgs(_lastEvent, WebView.Source, url, WebNavigationResult.Success);
+			var args = new SuperWebNavigatedEventArgs(_lastEvent, WebView.Source, url, WebNavigationResult.Success);
 			WebView.SendNavigated(args);
 			_renderer.UpdateCanGoBackForward();
 
@@ -113,7 +113,7 @@ namespace Axemasta.SuperWebView.iOS
 			_lastEvent = navEvent;
 			var request = navigationAction.Request;
 			var lastUrl = request.Url.ToString();
-			var args = new WebNavigatingEventArgs(navEvent, new UrlWebViewSource { Url = lastUrl }, lastUrl);
+			var args = new SuperWebNavigatingEventArgs(navEvent, new SuperUrlWebViewSource { Url = lastUrl }, lastUrl);
 
 			WebView.SendNavigating(args);
 			_renderer.UpdateCanGoBackForward();

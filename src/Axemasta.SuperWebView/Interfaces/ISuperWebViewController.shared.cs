@@ -6,14 +6,14 @@ namespace Axemasta.SuperWebView
 {
     public interface ISuperWebViewController : IViewController
     {
-		bool CanGoBack { get; set; }
-		bool CanGoForward { get; set; }
-		event EventHandler<EvalRequested> EvalRequested;
-		event EvaluateJavaScriptDelegate EvaluateJavaScriptRequested;
-		event EventHandler GoBackRequested;
-		event EventHandler GoForwardRequested;
-		event EventHandler ReloadRequested;
-		void SendNavigated(SuperWebNavigatedEventArgs args);
-		void SendNavigating(SuperWebNavigatingEventArgs args);
-	}
+        bool CanGoBack { get; set; }
+        bool CanGoForward { get; set; }
+        event EventHandler<EvalRequested> EvalRequested;
+        event EvaluateJavaScriptDelegate EvaluateJavaScriptRequested;
+        event EventHandler GoBackRequested;
+        event EventHandler GoForwardRequested;
+        event EventHandler ReloadRequested;
+        void SendNavigated(SuperWebNavigatedEventArgs args);
+        void SendNavigating(SuperWebNavigatingEventArgs args);
+    }
 }
