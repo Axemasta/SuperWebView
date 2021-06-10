@@ -59,12 +59,12 @@ namespace Axemasta.SuperWebView.Droid
             if (url == AssetBaseUrl)
                 return false;
 
-            var args = new SuperWebNavigatingEventArgs(_eventState, new SuperUrlWebViewSource { Url = url }, url);
+            var args = new SuperWebNavigatingEventArgs(_eventState, new SuperUrlWebViewSource { Url = url }, url, true);
             SyncNativeCookies(url);
             ElementController.SendNavigating(args);
             UpdateCanGoBackForward();
-            UrlCanceled = args.Cancel ? null : url;
-            return args.Cancel;
+            //UrlCanceled = args.Cancel ? null : url;
+            return false;
         }
 
         protected override void Dispose(bool disposing)

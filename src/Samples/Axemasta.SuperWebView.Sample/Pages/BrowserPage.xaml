@@ -11,6 +11,7 @@
                 <Label Text="SuperWebView Sample" FontSize="Title" HorizontalTextAlignment="Center"/>
             </Frame>
 
+            <!--<WebView x:Name="normalWebView" Grid.Row="1"/>-->
             <super:SuperWebView x:Name="superWebView" Grid.Row="1"/>
         </Grid>
     </ContentPage.Content>
