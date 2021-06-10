@@ -6,8 +6,6 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Axemasta.SuperWebView;
-using Axemasta.SuperWebView.Internals;
 using Foundation;
 using UIKit;
 using WebKit;
@@ -126,9 +124,6 @@ namespace Axemasta.SuperWebView.iOS
 
             if (Element != null && !string.IsNullOrEmpty(Element.AutomationId))
                 AccessibilityIdentifier = Element.AutomationId;
-
-            if (element != null)
-                element.SendViewInitialized(this);
         }
 
         public void SetElementSize(Size size)
@@ -150,7 +145,6 @@ namespace Axemasta.SuperWebView.iOS
         {
             try
             {
-
                 var uri = new Uri(url);
 
                 var safeHostUri = new Uri($"{uri.Scheme}://{uri.Authority}", UriKind.Absolute);
@@ -229,6 +223,7 @@ namespace Axemasta.SuperWebView.iOS
         {
             base.MovedToWindow();
             _firstLoadFinished = true;
+
             if (!string.IsNullOrWhiteSpace(_pendingUrl))
             {
                 var closure = _pendingUrl;
@@ -265,8 +260,8 @@ namespace Axemasta.SuperWebView.iOS
             if (_ignoreSourceChanges)
                 return;
 
-            if (((SuperWebView)Element).Source != null)
-                ((SuperWebView)Element).Source.Load(this);
+            if (WebView.Source != null)
+                WebView.Source.Load(this);
 
             UpdateCanGoBackForward();
         }

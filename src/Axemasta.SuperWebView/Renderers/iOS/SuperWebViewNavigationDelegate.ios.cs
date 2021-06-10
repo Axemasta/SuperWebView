@@ -1,9 +1,8 @@
-﻿using System;
+using System;
 using Foundation;
 using WebKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
-using Xamarin.Forms.Platform.iOS;
 
 namespace Axemasta.SuperWebView.iOS
 {
@@ -54,6 +53,7 @@ namespace Axemasta.SuperWebView.iOS
 			_renderer._ignoreSourceChanges = true;
 			WebView.SetValueFromRenderer(SuperWebView.SourceProperty, new SuperUrlWebViewSource { Url = url });
 			_renderer._ignoreSourceChanges = false;
+
 			ProcessNavigated(url);
 		}
 

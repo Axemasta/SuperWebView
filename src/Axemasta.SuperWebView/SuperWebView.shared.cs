@@ -16,7 +16,7 @@ namespace Axemasta.SuperWebView
     [RenderWith(typeof(_SuperWebViewRenderer))]
     public class SuperWebView : View, ISuperWebViewController, IElementConfiguration<SuperWebView>
     {
-        public static readonly BindableProperty SourceProperty = BindableProperty.Create("Source", typeof(SuperWebViewSource), typeof(SuperWebView), default(SuperWebViewSource),
+        public static readonly BindableProperty SourceProperty = BindableProperty.Create(nameof(Source), typeof(SuperWebViewSource), typeof(SuperWebView), default(SuperWebViewSource),
             propertyChanging: (bindable, oldvalue, newvalue) =>
             {
                 var source = oldvalue as SuperWebViewSource;
@@ -33,11 +33,11 @@ namespace Axemasta.SuperWebView
                 }
             });
 
-        static readonly BindablePropertyKey CanGoBackPropertyKey = BindableProperty.CreateReadOnly("CanGoBack", typeof(bool), typeof(SuperWebView), false);
+        static readonly BindablePropertyKey CanGoBackPropertyKey = BindableProperty.CreateReadOnly(nameof(CanGoBack), typeof(bool), typeof(SuperWebView), false);
 
         public static readonly BindableProperty CanGoBackProperty = CanGoBackPropertyKey.BindableProperty;
 
-        static readonly BindablePropertyKey CanGoForwardPropertyKey = BindableProperty.CreateReadOnly("CanGoForward", typeof(bool), typeof(SuperWebView), false);
+        static readonly BindablePropertyKey CanGoForwardPropertyKey = BindableProperty.CreateReadOnly(nameof(CanGoForward), typeof(bool), typeof(SuperWebView), false);
 
         public static readonly BindableProperty CanGoForwardProperty = CanGoForwardPropertyKey.BindableProperty;
 
@@ -144,6 +144,7 @@ namespace Axemasta.SuperWebView
 			base.OnBindingContextChanged();
 
 			SuperWebViewSource source = Source;
+
 			if (source != null)
 			{
 				SetInheritedBindingContext(source, BindingContext);
@@ -152,7 +153,7 @@ namespace Axemasta.SuperWebView
 
 		protected override void OnPropertyChanged(string propertyName)
 		{
-			if (propertyName == "BindingContext")
+			if (propertyName == nameof(BindingContext))
 			{
 				SuperWebViewSource source = Source;
 				if (source != null)

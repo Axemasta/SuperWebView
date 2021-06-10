@@ -1,7 +1,4 @@
-﻿using System;
-using UIKit;
-using Xamarin.Forms;
-using TNativeView = UIKit.UIView;
+﻿using UIKit;
 
 namespace Axemasta.SuperWebView.iOS
 {
@@ -10,13 +7,6 @@ namespace Axemasta.SuperWebView.iOS
 		static bool? s_isiOS11OrNewer;
 		static bool? s_isiOS12OrNewer;
 		static bool? s_isiOS13OrNewer;
-
-		public static event EventHandler<ViewInitializedEventArgs> ViewInitialized;
-
-        internal static void SendViewInitialized(this VisualElement self, TNativeView nativeView)
-		{
-			ViewInitialized?.Invoke(self, new ViewInitializedEventArgs { View = self, NativeView = nativeView });
-		}
 
 		internal static bool IsiOS11OrNewer
 		{
@@ -47,12 +37,5 @@ namespace Axemasta.SuperWebView.iOS
 				return s_isiOS13OrNewer.Value;
 			}
 		}
-	}
-
-	public class ViewInitializedEventArgs : EventArgs
-	{
-		public TNativeView NativeView { get; internal set; }
-
-		public VisualElement View { get; internal set; }
 	}
 }
