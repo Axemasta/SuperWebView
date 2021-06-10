@@ -42,16 +42,16 @@ namespace Axemasta.SuperWebView.Droid
             LoadUrl(url, true);
         }
 
-        void LoadUrl(string url, bool fireNavigatingCanceled)
+        async void LoadUrl(string url, bool fireNavigatingCanceled)
         {
-            if (!fireNavigatingCanceled || !SendNavigatingCanceled(url))
+            if (!fireNavigatingCanceled || !await SendNavigatingCanceledAsync(url))
             {
                 _eventState = WebNavigationEvent.NewPage;
                 Control.LoadUrl(url);
             }
         }
 
-        protected internal bool SendNavigatingCanceled(string url)
+        protected internal async Task<bool> SendNavigatingCanceledAsync(string url)
         {
             if (Element == null || string.IsNullOrWhiteSpace(url))
                 return true;
@@ -64,7 +64,18 @@ namespace Axemasta.SuperWebView.Droid
             ElementController.SendNavigating(args);
             UpdateCanGoBackForward();
             //UrlCanceled = args.Cancel ? null : url;
-            return false;
+
+            var cancel = false;
+
+            if (args.DeferralRequested)
+            {
+                cancel = !await Task.Run(() => args.DeferredTask);
+            }
+
+            if (cancel)
+                Console.WriteLine($"Navigation is being cancelled for url: {url}");
+
+            return cancel;
         }
 
         protected override void Dispose(bool disposing)

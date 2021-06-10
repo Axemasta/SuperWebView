@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Net;
+using System.Threading.Tasks;
 using Android.Graphics;
 using Android.Runtime;
 using Android.Webkit;
@@ -24,27 +25,47 @@ namespace Axemasta.SuperWebView.Droid
 		{
 		}
 
-		bool SendNavigatingCanceled(string url) => _renderer?.SendNavigatingCanceled(url) ?? true;
+		async Task<bool> SendNavigatingCanceledAsync(string url)
+		{
+			if (_renderer == null)
+				return true;
+
+			return await _renderer.SendNavigatingCanceledAsync(url);
+		}
 
 		[Obsolete("ShouldOverrideUrlLoading(view,url) is obsolete as of version 4.0.0. This method was deprecated in API level 24.")]
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		// api 19-23
 		public override bool ShouldOverrideUrlLoading(WView view, string url)
-			=> SendNavigatingCanceled(url);
+        {
+			OverrideUrlLoading(url, () => SendNavigatingCanceledAsync(url));
+
+			return true;
+		}
 
 		// api 24+
 		public override bool ShouldOverrideUrlLoading(WView view, IWebResourceRequest request)
-			=> SendNavigatingCanceled(request?.Url?.ToString());
+        {
+			var url = request?.Url?.ToString();
 
-		public override void OnPageStarted(WView view, string url, Bitmap favicon)
+			OverrideUrlLoading(url, () => SendNavigatingCanceledAsync(url));
+
+			return true;
+		}
+
+		public override async void OnPageStarted(WView view, string url, Bitmap favicon)
 		{
 			if (_renderer?.Element == null || string.IsNullOrWhiteSpace(url) || url == WebViewRenderer.AssetBaseUrl)
 				return;
 
 			_renderer.SyncNativeCookiesToElement(url);
 			var cancel = false;
+
 			if (!url.Equals(_renderer.UrlCanceled, StringComparison.OrdinalIgnoreCase))
-				cancel = SendNavigatingCanceled(url);
+			{
+				cancel = await SendNavigatingCanceledAsync(url);
+			}
+
 			_renderer.UrlCanceled = null;
 
 			if (cancel)
@@ -115,6 +136,22 @@ namespace Axemasta.SuperWebView.Droid
 			base.Dispose(disposing);
 			if (disposing)
 				_renderer = null;
+		}
+
+		public async void OverrideUrlLoading(string url, Func<Task<bool>> urlEvaluator)
+		{
+			if (urlEvaluator == null)
+			{
+				_renderer.LoadUrl(url);
+				return;
+			}
+
+			var canload = !await urlEvaluator.Invoke();
+
+			if (canload)
+			{
+				_renderer.LoadUrl(url);
+			}
 		}
 	}
 }
