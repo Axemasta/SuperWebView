@@ -16,6 +16,7 @@ namespace Axemasta.SuperWebView.Sample.Pages
 
             superWebView.Navigating += OnNavigating;
             superWebView.Navigated += OnNavigated;
+            superWebView.NavigationCancelled += OnNavigationCancelled;
 
             superWebView.ProgressChanged += OnProgress;
 
@@ -23,6 +24,11 @@ namespace Axemasta.SuperWebView.Sample.Pages
 
             //normalWebView.Navigating += OnNavigating;
             //normalWebView.Navigated += OnNavigated;
+        }
+
+        private void OnNavigationCancelled(object sender, NavigationCancelledEventArgs e)
+        {
+            Debug.WriteLine($"OnNavigationCancelled - Navigation to site cancelled: {e.Url}");
         }
 
         private void OnProgress(object sender, ProgressEventArgs e)

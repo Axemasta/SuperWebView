@@ -149,6 +149,8 @@ namespace Axemasta.SuperWebView
 
 		public event EventHandler<SuperWebNavigatingEventArgs> Navigating;
 
+		public event EventHandler<NavigationCancelledEventArgs> NavigationCancelled;
+
 		protected override void OnBindingContextChanged()
 		{
 			base.OnBindingContextChanged();
@@ -222,6 +224,16 @@ namespace Axemasta.SuperWebView
 		public void SendProgressChanged(ProgressEventArgs args)
         {
 			ProgressChanged?.Invoke(this, args);
+        }
+
+		/// <summary>
+        /// Send Navigation Cancelled
+        /// </summary>
+        /// <param name="args"></param>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public void SendNavigationCancelled(NavigationCancelledEventArgs args)
+        {
+			NavigationCancelled?.Invoke(this, args);
         }
 
 		static string EscapeJsString(string js)

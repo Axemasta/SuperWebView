@@ -74,7 +74,7 @@ namespace Axemasta.SuperWebView.Droid
             }
 
             if (cancel)
-                Console.WriteLine($"Navigation is being cancelled for url: {url}");
+                SuperWebView.SendNavigationCancelled(new NavigationCancelledEventArgs(url));
 
             return cancel;
         }

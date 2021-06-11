@@ -159,7 +159,7 @@ namespace Axemasta.SuperWebView.iOS
 			var cancel = args.Cancelled ? WKNavigationActionPolicy.Cancel : WKNavigationActionPolicy.Allow;
 
 			if (cancel == WKNavigationActionPolicy.Cancel)
-				Console.WriteLine("Navigation is being cancelled");
+				WebView.SendNavigationCancelled(new NavigationCancelledEventArgs(args.Url));
 
 			decisionHandler(cancel);
 		}
