@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net;
 using System.Threading.Tasks;
@@ -13,16 +14,21 @@ namespace Axemasta.SuperWebView.Droid
 {
 	public class FormsSuperWebViewClient : WebViewClient
 	{
+		private readonly List<string> _scripts;
 		WebNavigationResult _navigationResult = WebNavigationResult.Success;
 		SuperWebViewRenderer _renderer;
 		string _lastUrlNavigatedCancel;
 
 		public FormsSuperWebViewClient(SuperWebViewRenderer renderer)
-			=> _renderer = renderer ?? throw new ArgumentNullException("renderer");
+        {
+			_renderer = renderer ?? throw new ArgumentNullException("renderer");
+			_scripts = new List<string>();
+		}
 
 		protected FormsSuperWebViewClient(IntPtr javaReference, JniHandleOwnership transfer)
 			: base(javaReference, transfer)
 		{
+			_scripts = new List<string>();
 		}
 
 		async Task<bool> SendNavigatingCanceledAsync(string url)
@@ -100,6 +106,14 @@ namespace Axemasta.SuperWebView.Droid
 				_renderer.ElementController.SendNavigated(args);
 			}
 
+			if (_scripts != null && _scripts.Count > 0)
+			{
+				foreach (string script in _scripts)
+				{
+					view.EvaluateJavascript(script, null);
+				}
+			}
+
 			_renderer.UpdateCanGoBackForward();
 
 			base.OnPageFinished(view, url);
@@ -153,5 +167,10 @@ namespace Axemasta.SuperWebView.Droid
 				_renderer.LoadUrl(url);
 			}
 		}
+
+		public void InjectScript(string script)
+        {
+			_scripts.Add(script);
+        }
 	}
 }

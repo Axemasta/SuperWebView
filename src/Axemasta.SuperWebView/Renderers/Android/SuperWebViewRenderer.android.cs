@@ -17,9 +17,10 @@ namespace Axemasta.SuperWebView.Droid
     public class SuperWebViewRenderer : ViewRenderer<SuperWebView, AWebView>, IWebViewDelegate
     {
         public const string AssetBaseUrl = "file:///android_asset/";
+        private const string _jsBridge = "jsBridge";
 
         WebNavigationEvent _eventState;
-        WebViewClient _webViewClient;
+        FormsSuperWebViewClient _webViewClient;
         FormsSuperWebChromeClient _webChromeClient;
         bool _isDisposed = false;
         protected internal ISuperWebViewController ElementController => Element;
@@ -105,7 +106,7 @@ namespace Axemasta.SuperWebView.Droid
             base.Dispose(disposing);
         }
 
-        protected virtual WebViewClient GetWebViewClient()
+        protected virtual FormsSuperWebViewClient GetWebViewClient()
         {
             return new FormsSuperWebViewClient(this);
         }
@@ -168,6 +169,12 @@ namespace Axemasta.SuperWebView.Droid
                 webView.Settings.JavaScriptEnabled = true;
                 webView.Settings.DomStorageEnabled = true;
                 SetNativeControl(webView);
+
+                //Control.SetWebViewClient(new JavascriptWebViewClient(this, _scripts));
+                webView.AddJavascriptInterface(new JSBridge(this), _jsBridge);
+
+                SuperWebView.InjectJavaScriptRequested += OnInjectScriptRequested;
+                SuperWebView.SendRendererInitialised();
             }
 
             if (e.OldElement != null)
@@ -195,6 +202,33 @@ namespace Axemasta.SuperWebView.Droid
             }
 
             Load();
+        }
+
+        private void OnInjectScriptRequested(string script)
+        {
+            _webViewClient.InjectScript(script);
+        }
+
+        //TODO: Move this to a constants file
+        private const string InvokeActionKey = "invokeAction";
+
+        private Dictionary<string, bool> _activeScripts;
+
+        private void InjectJSBridge()
+        {
+            try
+            {
+                var assemblyName = GetType().Assembly.FullName;
+
+                var invokeNative = EmbeddedResourceHelper.Load("Axemasta.SuperWebView.Scripts.invokenative.android.js", assemblyName);
+
+                _activeScripts.Add(invokeNative, false);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(nameof(SuperWebViewRenderer), "Could not load invokenative.android.js");
+                Log.Warning(nameof(SuperWebViewRenderer), ex.ToString());
+            }
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -47,6 +47,9 @@
     <AndroidResource Include="Resources\**\*.axml" />
     <AndroidResource Include="Resources\**\*.xml" />
     <AndroidResource Include="Resources\**\*.png" />
+
+    <!--Required for JS Invocations-->
+    <Reference Include="Mono.Android.Export" />
   </ItemGroup>
     
   <ItemGroup Condition=" $(TargetFramework.StartsWith('Xamarin.iOS')) ">
@@ -60,7 +63,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\invokenative.android.js"/>
-    <EmbeddedResource Include="Scripts\invokenative.ios.js"/>
+    <EmbeddedResource Include="Scripts\invokenative.android.js" />
+    <EmbeddedResource Include="Scripts\invokenative.ios.js" />
   </ItemGroup>
 </Project>
