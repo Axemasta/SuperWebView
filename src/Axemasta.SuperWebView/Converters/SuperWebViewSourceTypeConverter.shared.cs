@@ -8,16 +8,17 @@ namespace Axemasta.SuperWebView
 	{
 		public override object ConvertFromInvariantString(string value)
 		{
-			if (value != null)
-				return new UrlWebViewSource { Url = value };
-
-			throw new InvalidOperationException(string.Format("Cannot convert \"{0}\" into {1}", value, typeof(SuperUrlWebViewSource)));
+			if (value == null)
+				throw new InvalidOperationException(string.Format("Cannot convert \"{0}\" into {1}", value, typeof(SuperUrlWebViewSource)));
+			
+			return new SuperUrlWebViewSource { Url = value };
 		}
 
 		public override string ConvertToInvariantString(object value)
 		{
 			if (!(value is SuperUrlWebViewSource uwvs))
 				throw new NotSupportedException();
+
 			return uwvs.Url;
 		}
 	}

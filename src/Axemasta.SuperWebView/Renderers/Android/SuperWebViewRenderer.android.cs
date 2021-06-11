@@ -63,7 +63,6 @@ namespace Axemasta.SuperWebView.Droid
             SyncNativeCookies(url);
             ElementController.SendNavigating(args);
             UpdateCanGoBackForward();
-            //UrlCanceled = args.Cancel ? null : url;
 
             var cancel = false;
 

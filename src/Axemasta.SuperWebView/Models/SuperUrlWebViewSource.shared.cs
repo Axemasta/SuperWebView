@@ -6,7 +6,7 @@ namespace Axemasta.SuperWebView
 {
     public class SuperUrlWebViewSource : SuperWebViewSource
 	{
-		public static readonly BindableProperty UrlProperty = BindableProperty.Create("Url", typeof(string), typeof(SuperUrlWebViewSource), default(string),
+		public static readonly BindableProperty UrlProperty = BindableProperty.Create(nameof(Url), typeof(string), typeof(SuperUrlWebViewSource), default(string),
 			propertyChanged: (bindable, oldvalue, newvalue) => ((SuperUrlWebViewSource)bindable).OnSourceChanged());
 
 		public string Url

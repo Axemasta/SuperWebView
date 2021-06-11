@@ -260,6 +260,9 @@ namespace Axemasta.SuperWebView.iOS
             if (_ignoreSourceChanges)
                 return;
 
+            if (WebView.Source == null)
+                Log.Warning(nameof(SuperWkWebViewRenderer), "Webview source was null");
+
             if (WebView.Source != null)
                 WebView.Source.Load(this);
 

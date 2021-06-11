@@ -12,7 +12,7 @@ namespace Axemasta.SuperWebView.Sample.Pages
         {
             InitializeComponent();
 
-            superWebView.Source = "https://www.google.co.uk";
+            //superWebView.Source = "https://www.google.co.uk";
 
             superWebView.Navigating += OnNavigating;
             superWebView.Navigated += OnNavigated;
