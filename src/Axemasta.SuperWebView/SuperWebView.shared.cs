@@ -43,6 +43,10 @@ namespace Axemasta.SuperWebView
 
         public static readonly BindableProperty CookiesProperty = BindableProperty.Create(nameof(Cookies), typeof(CookieContainer), typeof(SuperWebView), null);
 
+		static readonly BindablePropertyKey ProgressPropertyKey = BindableProperty.CreateReadOnly(nameof(Progress), typeof(double), typeof(SuperWebView), (double)0);
+
+		public static readonly BindableProperty ProgressProperty = ProgressPropertyKey.BindableProperty;
+
 		readonly Lazy<PlatformConfigurationRegistry<SuperWebView>> _platformConfigurationRegistry;
 
 		public SuperWebView()
@@ -90,6 +94,12 @@ namespace Axemasta.SuperWebView
 		{
 			get { return (SuperWebViewSource)GetValue(SourceProperty); }
 			set { SetValue(SourceProperty, value); }
+		}
+
+		public double Progress
+		{
+			get => (double)GetValue(ProgressProperty);
+			set => SetValue(ProgressProperty, value);
 		}
 
 		public void Eval(string script)
@@ -186,6 +196,8 @@ namespace Axemasta.SuperWebView
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public event EventHandler GoForwardRequested;
 
+		public event EventHandler<ProgressEventArgs> ProgressChanged;
+
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public void SendNavigated(SuperWebNavigatedEventArgs args)
 		{
@@ -200,6 +212,17 @@ namespace Axemasta.SuperWebView
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public event EventHandler ReloadRequested;
+
+		/// <summary>
+        /// Send Progress Update
+        /// </summary>
+        /// <param name="progress"></param>
+        /// <param name="maximum"></param>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public void SendProgressChanged(ProgressEventArgs args)
+        {
+			ProgressChanged?.Invoke(this, args);
+        }
 
 		static string EscapeJsString(string js)
 		{

@@ -17,10 +17,18 @@ namespace Axemasta.SuperWebView.Sample.Pages
             superWebView.Navigating += OnNavigating;
             superWebView.Navigated += OnNavigated;
 
+            superWebView.ProgressChanged += OnProgress;
+
             //normalWebView.Source = "https://www.google.co.uk";
 
             //normalWebView.Navigating += OnNavigating;
             //normalWebView.Navigated += OnNavigated;
+        }
+
+        private void OnProgress(object sender, ProgressEventArgs e)
+        {
+            Debug.WriteLine($"OnProgress: {e.Percentage}%");
+            Debug.WriteLine($"OnProgress - Raw: {e.Progress}");
         }
 
         private void OnNavigating(object sender, WebNavigatingEventArgs e)

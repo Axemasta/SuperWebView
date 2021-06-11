@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -35,6 +36,8 @@ namespace Axemasta.SuperWebView.iOS
 
         UIView ITabStop.TabStop => this;
 
+        private readonly List<IDisposable> _disposables;
+
         public event EventHandler<VisualElementChangedEventArgs> ElementChanged;
 
         protected virtual void OnElementChanged(VisualElementChangedEventArgs e) =>
@@ -43,6 +46,8 @@ namespace Axemasta.SuperWebView.iOS
         //TODO: Fix violation of encapsulation
         public bool _ignoreSourceChanges;
         public WebNavigationEvent _lastBackForwardEvent;
+
+        private const string EstimatedProgressKey = "estimatedProgress";
 
         bool _disposed;
         static int _sharedPoolCount = 0;
@@ -66,7 +71,7 @@ namespace Axemasta.SuperWebView.iOS
 		public SuperWkWebViewRenderer(WKWebViewConfiguration config)
 			: base(RectangleF.Empty, config)
 		{
-
+            _disposables = new List<IDisposable>();
 		}
 
         #region Methods
@@ -106,6 +111,9 @@ namespace Axemasta.SuperWebView.iOS
 
                     AutosizesSubviews = true;
 
+                    var progress = AddObserver(EstimatedProgressKey, NSKeyValueObservingOptions.New, OnProgressUpdated);
+                    _disposables.Add(progress);
+
                     _tracker = new VisualElementTracker(this);
 
                     _packager = new VisualElementPackager(this);
@@ -124,6 +132,17 @@ namespace Axemasta.SuperWebView.iOS
 
             if (Element != null && !string.IsNullOrEmpty(Element.AutomationId))
                 AccessibilityIdentifier = Element.AutomationId;
+        }
+
+        /// <summary>
+        /// Called When Progress Observer Updates
+        /// </summary>
+        /// <param name="nsObservedChange"></param>
+        private void OnProgressUpdated(NSObservedChange nsObservedChange)
+        {
+            // Estimated Progress ranged from 0 => 1
+
+            WebView.SendProgressChanged(new ProgressEventArgs(EstimatedProgress, 1));
         }
 
         public void SetElementSize(Size size)
@@ -354,6 +373,9 @@ namespace Axemasta.SuperWebView.iOS
                 _events = null;
                 _tracker = null;
                 _events = null;
+
+                if (_disposables != null && _disposables.Any())
+                    _disposables.ForEach(d => d.Dispose());
             }
 
             base.Dispose(disposing);

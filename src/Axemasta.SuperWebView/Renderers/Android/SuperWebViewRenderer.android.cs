@@ -26,6 +26,8 @@ namespace Axemasta.SuperWebView.Droid
         protected internal bool IgnoreSourceChanges { get; set; }
         protected internal string UrlCanceled { get; set; }
 
+        protected internal SuperWebView SuperWebView => Element as SuperWebView;
+
         public SuperWebViewRenderer(Context context) : base(context)
         {
             AutoPackage = false;
@@ -130,6 +132,14 @@ namespace Axemasta.SuperWebView.Droid
             return _eventState;
         }
 
+        private void OnProgressChanged(object sender, ProgressEventArgs e)
+        {
+            if (SuperWebView == null)
+                return;
+
+            SuperWebView.SendProgressChanged(e);
+        }
+
         protected override void OnElementChanged(ElementChangedEventArgs<SuperWebView> e)
         {
             base.OnElementChanged(e);
@@ -147,6 +157,7 @@ namespace Axemasta.SuperWebView.Droid
                 _webChromeClient = GetFormsWebChromeClient();
                 _webChromeClient.SetContext(Context);
                 webView.SetWebChromeClient(_webChromeClient);
+                _webChromeClient.ProgressChanged += OnProgressChanged;
 
                 //if (Context.IsDesignerContext())
                 //{

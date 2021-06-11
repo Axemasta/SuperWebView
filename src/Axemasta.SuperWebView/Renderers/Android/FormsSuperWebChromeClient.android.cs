@@ -10,6 +10,8 @@ namespace Axemasta.SuperWebView.Droid
 {
     public class FormsSuperWebChromeClient : WebChromeClient
     {
+		public event EventHandler<ProgressEventArgs> ProgressChanged;
+
 		Activity _activity;
 		List<int> _requestCodes;
 
@@ -75,5 +77,10 @@ namespace Axemasta.SuperWebView.Droid
 			if (_activity == null)
 				Log.Warning(nameof(SuperWebViewRenderer), $"Failed to set the activity of the WebChromeClient, can't show pickers on the Webview");
 		}
-	}
+
+        public override void OnProgressChanged(WebView view, int newProgress)
+        {
+            ProgressChanged?.Invoke(this, new ProgressEventArgs(newProgress, 100));
+        }
+    }
 }
