@@ -52,8 +52,10 @@ namespace Axemasta.SuperWebView
 		public SuperWebView()
         {
             _platformConfigurationRegistry = new Lazy<PlatformConfigurationRegistry<SuperWebView>>(() => new PlatformConfigurationRegistry<SuperWebView>(this));
+
+            this.RendererInitialised += OnRendererInitialised;
         }
-        
+
         public IPlatformElementConfiguration<T, SuperWebView> On<T>() where T : IConfigPlatform
         {
             return _platformConfigurationRegistry.Value.On<T>();
@@ -151,6 +153,16 @@ namespace Axemasta.SuperWebView
 
 		public event EventHandler<NavigationCancelledEventArgs> NavigationCancelled;
 
+		/// <summary>
+        /// Called When WebView Javascript Calls Back To The App
+        /// </summary>
+		public event EventHandler<BrowserInvocationEventArgs> BrowserInvocation;
+
+		public void SendBrowserInvocation(BrowserInvocationEventArgs args)
+        {
+			BrowserInvocation?.Invoke(this, args);
+        }
+
 		protected override void OnBindingContextChanged()
 		{
 			base.OnBindingContextChanged();
@@ -191,6 +203,9 @@ namespace Axemasta.SuperWebView
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public event EvaluateJavaScriptDelegate EvaluateJavaScriptRequested;
+
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public event InjectJavaScriptDelegate InjectJavaScriptRequested;
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public event EventHandler GoBackRequested;
@@ -234,6 +249,62 @@ namespace Axemasta.SuperWebView
 		public void SendNavigationCancelled(NavigationCancelledEventArgs args)
         {
 			NavigationCancelled?.Invoke(this, args);
+        }
+
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public event EventHandler RendererInitialised;
+
+		/// <summary>
+        /// Inject Javascript Into The DOM
+        /// </summary>
+        /// <param name="scripts"></param>
+		public void InjectJavascript(List<JavaScript> scripts)
+        {
+			if (scripts is null || scripts.Count < 1)
+				return;
+
+			if (!_rendererInitialised)
+            {
+				// Need to wait for SetElement to finish setting up before the handler is available for use
+				RendererInitialised += (s, e) => OnInjectJavascript(scripts);
+			}
+        }
+
+		private bool _rendererInitialised;
+
+		private void OnRendererInitialised(object sender, EventArgs e)
+		{
+			this.RendererInitialised -= OnRendererInitialised;
+			_rendererInitialised = true;
+		}
+
+		private void OnInjectJavascript(List<JavaScript> scripts)
+        {
+			RendererInitialised -= (s, e) => OnInjectJavascript(scripts);
+
+			InjectJavaScriptDelegate handler = InjectJavaScriptRequested;
+
+			foreach (var script in scripts)
+			{
+				// load script
+				var loaded = script.TryLoadScript(out string scriptContent);
+
+				if (!loaded)
+				{
+					// Warn
+					Log.Warning(nameof(SuperWebView), $"Unable to load script content for: {script.Name}");
+					continue;
+				}
+
+				// Send load to renderer
+				handler?.Invoke(scriptContent);
+			}
+		}
+
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public void SendRendererInitialised()
+        {
+			this.RendererInitialised?.Invoke(this, EventArgs.Empty);
         }
 
 		static string EscapeJsString(string js)

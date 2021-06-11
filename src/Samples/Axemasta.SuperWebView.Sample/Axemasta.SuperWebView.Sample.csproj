@@ -19,5 +19,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Pages\" />
+    <Folder Include="Scripts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Scripts\jquery-3.5.1.min.js" />
+    <None Remove="Scripts\spy.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\jquery-3.5.1.min.js" />
+    <EmbeddedResource Include="Scripts\spy.js" />
   </ItemGroup>
 </Project>

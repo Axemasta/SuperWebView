@@ -18,7 +18,7 @@ using RectangleF = System.Drawing.RectangleF;
 
 namespace Axemasta.SuperWebView.iOS
 {
-    public class SuperWkWebViewRenderer : WKWebView, IVisualElementRenderer, IWebViewDelegate, IEffectControlProvider, ITabStop
+    public class SuperWkWebViewRenderer : WKWebView, IVisualElementRenderer, IWebViewDelegate, IEffectControlProvider, ITabStop, IWKScriptMessageHandler
 	{
         public SuperWebView WebView => Element as SuperWebView;
 
@@ -47,6 +47,7 @@ namespace Axemasta.SuperWebView.iOS
         public bool _ignoreSourceChanges;
         public WebNavigationEvent _lastBackForwardEvent;
 
+        private const string InvokeActionKey = "invokeAction";
         private const string EstimatedProgressKey = "estimatedProgress";
 
         bool _disposed;
@@ -54,6 +55,8 @@ namespace Axemasta.SuperWebView.iOS
         static bool _firstLoadFinished = false;
         string _pendingUrl;
         EventTracker _events;
+
+        private WKUserContentController _userController;
 
         VisualElementPackager _packager;
 //#pragma warning disable CS0414
@@ -71,6 +74,7 @@ namespace Axemasta.SuperWebView.iOS
 		public SuperWkWebViewRenderer(WKWebViewConfiguration config)
 			: base(RectangleF.Empty, config)
 		{
+            _userController = config.UserContentController;
             _disposables = new List<IDisposable>();
 		}
 
@@ -101,6 +105,7 @@ namespace Axemasta.SuperWebView.iOS
                 {
                     WebView.EvalRequested += OnEvalRequested;
                     WebView.EvaluateJavaScriptRequested += OnEvaluateJavaScriptRequested;
+                    WebView.InjectJavaScriptRequested += InjectJavaScript;
                     WebView.GoBackRequested += OnGoBackRequested;
                     WebView.GoForwardRequested += OnGoForwardRequested;
                     WebView.ReloadRequested += OnReloadRequested;
@@ -121,6 +126,10 @@ namespace Axemasta.SuperWebView.iOS
 
                     _events = new EventTracker(this);
                     _events.LoadEvents(this);
+
+                    InjectJSBridge();
+
+                    WebView.SendRendererInitialised();
                 }
 
                 Load();
@@ -132,6 +141,34 @@ namespace Axemasta.SuperWebView.iOS
 
             if (Element != null && !string.IsNullOrEmpty(Element.AutomationId))
                 AccessibilityIdentifier = Element.AutomationId;
+        }
+
+        private void InjectJSBridge()
+        {
+            try
+            {
+                var assemblyName = GetType().Assembly.FullName;
+
+                var invokeNative = EmbeddedResourceHelper.Load("Axemasta.SuperWebView.Scripts.invokenative.ios.js", assemblyName);
+
+                InjectJavaScript(invokeNative);
+
+                _userController.AddScriptMessageHandler(this, InvokeActionKey);
+            }
+            catch (Exception ex)
+            {
+                Log.Warning(nameof(SuperWkWebViewRenderer), "Could not load invokenative.ios.js");
+                Log.Warning(nameof(SuperWkWebViewRenderer), ex.ToString());
+            }
+        }
+
+        private void InjectJavaScript(string script)
+        {
+            var nsScript = new NSString(script);
+
+            var wkScript = new WKUserScript(nsScript, WKUserScriptInjectionTime.AtDocumentEnd, false);
+
+            _userController.AddUserScript(wkScript);
         }
 
         /// <summary>
@@ -232,6 +269,16 @@ namespace Axemasta.SuperWebView.iOS
         {
             ((ISuperWebViewController)WebView).CanGoBack = CanGoBack;
             ((ISuperWebViewController)WebView).CanGoForward = CanGoForward;
+        }
+
+        public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
+        {
+            if (message != null && message.Body != null)
+            {
+                var data = message.Body.ToString();
+
+                WebView.SendBrowserInvocation(new BrowserInvocationEventArgs(data));
+            }
         }
 
         #endregion - Interface Methods
@@ -359,6 +406,7 @@ namespace Axemasta.SuperWebView.iOS
                 Element.PropertyChanged -= HandlePropertyChanged;
                 WebView.EvalRequested -= OnEvalRequested;
                 WebView.EvaluateJavaScriptRequested -= OnEvaluateJavaScriptRequested;
+                WebView.InjectJavaScriptRequested -= InjectJavaScript;
                 WebView.GoBackRequested -= OnGoBackRequested;
                 WebView.GoForwardRequested -= OnGoForwardRequested;
                 WebView.ReloadRequested -= OnReloadRequested;

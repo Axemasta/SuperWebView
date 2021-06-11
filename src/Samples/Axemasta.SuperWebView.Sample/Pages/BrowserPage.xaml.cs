@@ -12,18 +12,26 @@ namespace Axemasta.SuperWebView.Sample.Pages
         {
             InitializeComponent();
 
-            //superWebView.Source = "https://www.google.co.uk";
-
             superWebView.Navigating += OnNavigating;
             superWebView.Navigated += OnNavigated;
             superWebView.NavigationCancelled += OnNavigationCancelled;
-
             superWebView.ProgressChanged += OnProgress;
+            superWebView.BrowserInvocation += OnBrowserInvocation;
 
-            //normalWebView.Source = "https://www.google.co.uk";
+            var assemblyName = this.GetType().Assembly.FullName;
 
-            //normalWebView.Navigating += OnNavigating;
-            //normalWebView.Navigated += OnNavigated;
+            var scripts = new List<JavaScript>()
+            {
+                new EmbeddedJavaScript("JQuery", "Axemasta.SuperWebView.Sample.Scripts.jquery-3.5.1.min.js", assemblyName),
+                new EmbeddedJavaScript("Spy", "Axemasta.SuperWebView.Sample.Scripts.spy.js", assemblyName)
+            };
+
+            superWebView.InjectJavascript(scripts);
+        }
+
+        private void OnBrowserInvocation(object sender, BrowserInvocationEventArgs e)
+        {
+            Debug.WriteLine($"OnBrowserInvocation - Invoked with data: {e.Message}");
         }
 
         private void OnNavigationCancelled(object sender, NavigationCancelledEventArgs e)
@@ -33,18 +41,8 @@ namespace Axemasta.SuperWebView.Sample.Pages
 
         private void OnProgress(object sender, ProgressEventArgs e)
         {
-            Debug.WriteLine($"OnProgress: {e.Percentage}%");
-            Debug.WriteLine($"OnProgress - Raw: {e.Progress}");
-        }
-
-        private void OnNavigating(object sender, WebNavigatingEventArgs e)
-        {
-            Debug.WriteLine($"OnNavigating Fired - {e.Url}");
-        }
-
-        private void OnNavigated(object sender, WebNavigatedEventArgs e)
-        {
-            Debug.WriteLine($"OnNavigated Fired - {e.Url}");
+            Debug.WriteLine($"OnProgress: {e.PercentageComplete}%");
+            Debug.WriteLine($"OnProgress - Raw: {e.RawProgress}");
         }
 
         private async void OnNavigating(object sender, SuperWebNavigatingEventArgs e)

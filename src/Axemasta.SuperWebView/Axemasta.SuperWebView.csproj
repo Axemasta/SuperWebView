@@ -54,4 +54,13 @@
     <Compile Include="**\*.ios.*.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Scripts\invokenative.android.js" />
+    <None Remove="Scripts\invokenative.ios.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\invokenative.android.js"/>
+    <EmbeddedResource Include="Scripts\invokenative.ios.js"/>
+  </ItemGroup>
 </Project>
