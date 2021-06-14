@@ -1,5 +1,6 @@
 ﻿using System;
 using Android.Webkit;
+using Axemasta.SuperWebView.Internals;
 using Java.Interop;
 using Xamarin.Forms.Internals;
 
@@ -15,7 +16,7 @@ namespace Axemasta.SuperWebView.Droid
         }
 
         [JavascriptInterface]
-        [Export("invokeAction")]
+        [Export(Constants.InvokeAction)]
         public void InvokeAction(string data)
         {
             if (_renderer is null)

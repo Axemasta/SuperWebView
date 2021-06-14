@@ -66,4 +66,5 @@
     <EmbeddedResource Include="Scripts\invokenative.android.js" />
     <EmbeddedResource Include="Scripts\invokenative.ios.js" />
   </ItemGroup>
+
 </Project>

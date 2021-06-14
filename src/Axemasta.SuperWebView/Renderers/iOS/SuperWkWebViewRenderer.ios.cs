@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Axemasta.SuperWebView.Internals;
 using Foundation;
 using UIKit;
 using WebKit;
@@ -46,9 +47,6 @@ namespace Axemasta.SuperWebView.iOS
         //TODO: Fix violation of encapsulation
         public bool _ignoreSourceChanges;
         public WebNavigationEvent _lastBackForwardEvent;
-
-        private const string InvokeActionKey = "invokeAction";
-        private const string EstimatedProgressKey = "estimatedProgress";
 
         bool _disposed;
         static int _sharedPoolCount = 0;
@@ -116,7 +114,7 @@ namespace Axemasta.SuperWebView.iOS
 
                     AutosizesSubviews = true;
 
-                    var progress = AddObserver(EstimatedProgressKey, NSKeyValueObservingOptions.New, OnProgressUpdated);
+                    var progress = AddObserver(iOSConstants.EstimatedProgress, NSKeyValueObservingOptions.New, OnProgressUpdated);
                     _disposables.Add(progress);
 
                     _tracker = new VisualElementTracker(this);
@@ -149,15 +147,15 @@ namespace Axemasta.SuperWebView.iOS
             {
                 var assemblyName = GetType().Assembly.FullName;
 
-                var invokeNative = EmbeddedResourceHelper.Load("Axemasta.SuperWebView.Scripts.invokenative.ios.js", assemblyName);
+                var invokeNative = EmbeddedResourceHelper.Load(iOSConstants.InvokeNativeScriptPath, assemblyName);
 
                 InjectJavaScript(invokeNative);
 
-                _userController.AddScriptMessageHandler(this, InvokeActionKey);
+                _userController.AddScriptMessageHandler(this, Constants.InvokeAction);
             }
             catch (Exception ex)
             {
-                Log.Warning(nameof(SuperWkWebViewRenderer), "Could not load invokenative.ios.js");
+                Log.Warning(nameof(SuperWkWebViewRenderer), $"Could not load {iOSConstants.InvokeNativeScriptPath}");
                 Log.Warning(nameof(SuperWkWebViewRenderer), ex.ToString());
             }
         }
