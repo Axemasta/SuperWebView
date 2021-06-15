@@ -16,6 +16,10 @@ namespace Axemasta.SuperWebView.Sample.Pages
             On<Xamarin.Forms.PlatformConfiguration.iOS>()
                 .SetUseSafeArea(true);
 
+            backButton.Clicked += OnBackRequested;
+            forwardButton.Clicked += OnForwardRequested;
+            reloadButton.Clicked += OnReloadRequested;
+
             superWebView.Navigating += OnNavigating;
             superWebView.Navigated += OnNavigated;
             superWebView.NavigationCancelled += OnNavigationCancelled;
@@ -31,6 +35,31 @@ namespace Axemasta.SuperWebView.Sample.Pages
             };
 
             superWebView.InjectJavascript(scripts);
+        }
+
+        private void OnReloadRequested(object sender, EventArgs e)
+        {
+            superWebView.Reload();
+        }
+
+        private void OnForwardRequested(object sender, EventArgs e)
+        {
+            superWebView.GoForward();
+
+            UpdateCanGoBackForward();
+        }
+
+        private void OnBackRequested(object sender, EventArgs e)
+        {
+            superWebView.GoBack();
+
+            UpdateCanGoBackForward();
+        }
+
+        private void UpdateCanGoBackForward()
+        {
+            forwardButton.IsEnabled = superWebView.CanGoForward;
+            backButton.IsEnabled = superWebView.CanGoBack;
         }
 
         private void OnBrowserInvocation(object sender, BrowserInvocationEventArgs e)
@@ -57,14 +86,17 @@ namespace Axemasta.SuperWebView.Sample.Pages
         {
             Debug.WriteLine($"OnNavigating Fired - {e.Url}");
 
-            var token = e.GetDeferral();
+            if (e.CanCancel)
+            {
+                var token = e.GetDeferral();
 
-            bool canBrowse = await CanBrowse(e.Url);
+                bool canBrowse = await CanBrowse(e.Url);
 
-            if (!canBrowse)
-                e.Cancel();
+                if (!canBrowse)
+                    e.Cancel();
 
-            token.Complete();
+                token.Complete();
+            }
         }
 
         private void OnNavigated(object sender, SuperWebNavigatedEventArgs e)
@@ -72,6 +104,8 @@ namespace Axemasta.SuperWebView.Sample.Pages
             Debug.WriteLine($"OnNavigated Fired - {e.Url}");
 
             addressLabel.Text = e.Url;
+
+            UpdateCanGoBackForward();
         }
 
         private async Task<bool> CanBrowse(string url)

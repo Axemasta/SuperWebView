@@ -15,12 +15,12 @@ namespace Axemasta.SuperWebView
 		public DeferrableEventArgs(bool canCancel)
 		{
 #if NETSTANDARD2_0
-			_deferralFinishedTask = () => Task.CompletedTask;
+            _deferralFinishedTask = () => Task.CompletedTask;
 #else
-			_deferralFinishedTask = () => Task.Delay(0);
+            _deferralFinishedTask = () => Task.Delay(0);
 #endif
 
-			CanCancel = canCancel;
+            CanCancel = canCancel;
 		}
 
 		public bool CanCancel { get; }
@@ -36,13 +36,13 @@ namespace Axemasta.SuperWebView
 
 		public bool Cancelled { get; private set; }
 
-		public DeferralToken GetDeferral()
+		public IDeferralToken GetDeferral()
 		{
 			if (_deferralCompleted)
 				throw new InvalidOperationException("Deferral has already been completed");
 
 			if (!CanCancel)
-				return null;
+				return new EmptyDeferralToken();
 
 			DeferralRequested = true;
 			var currentCount = Interlocked.Increment(ref _deferralCount);

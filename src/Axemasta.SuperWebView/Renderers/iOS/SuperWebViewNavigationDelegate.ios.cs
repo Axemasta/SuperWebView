@@ -119,7 +119,21 @@ namespace Axemasta.SuperWebView.iOS
 			_lastEvent = navEvent;
 			var request = navigationAction.Request;
 			var lastUrl = request.Url.ToString();
-			var args = new SuperWebNavigatingEventArgs(navEvent, new SuperUrlWebViewSource { Url = lastUrl }, lastUrl, true);
+
+			/* Without this the deferral token will cause a completely undiagnosable termination **/
+
+			if (SiteAlreadyVisited(_renderer.BackForwardList, lastUrl))
+            {
+				var backArgs = new SuperWebNavigatingEventArgs(navEvent, new SuperUrlWebViewSource { Url = lastUrl }, lastUrl, false);
+
+				WebView.SendNavigating(backArgs);
+				_renderer.UpdateCanGoBackForward();
+
+				decisionHandler(WKNavigationActionPolicy.Allow);
+				return;
+			}
+
+            var args = new SuperWebNavigatingEventArgs(navEvent, new SuperUrlWebViewSource { Url = lastUrl }, lastUrl, true);
 
 			/*
 			 * Register the deferral before sending the args incase the code using the deferral token
@@ -136,6 +150,36 @@ namespace Axemasta.SuperWebView.iOS
 			{
 				decisionHandler(WKNavigationActionPolicy.Allow);
 			}
+		}
+
+		bool SiteAlreadyVisited(WKBackForwardList wkBackForwardList, string url)
+        {
+			if (wkBackForwardList is null) return false;
+			if (wkBackForwardList.BackItem is null) return false;
+			if (wkBackForwardList.CurrentItem is null) return false;
+
+			try
+            {
+				var nsUrl = new NSUrl(url);
+
+				if (wkBackForwardList.CurrentItem.Url == nsUrl)
+					return true;
+
+				var backItems = wkBackForwardList.BackList;
+
+                foreach (var backItem in backItems)
+                {
+					if (backItem.Url == nsUrl)
+						return true;
+                }
+            }
+			catch (Exception ex)
+            {
+				Log.Warning(nameof(SuperWebViewNavigationDelegate), "An exception occurred determining whether site had already been visited");
+				Log.Warning(nameof(SuperWebViewNavigationDelegate), ex.ToString());
+			}
+
+			return false;
 		}
 
 		async Task NavigatingDeterminedCallback(SuperWebNavigatingEventArgs args, Action<WKNavigationActionPolicy> decisionHandler)
@@ -156,12 +200,12 @@ namespace Axemasta.SuperWebView.iOS
 
 		void DetermineNavigating(SuperWebNavigatingEventArgs args, Action<WKNavigationActionPolicy> decisionHandler)
 		{
-			var cancel = args.Cancelled ? WKNavigationActionPolicy.Cancel : WKNavigationActionPolicy.Allow;
+			var action = args.Cancelled ? WKNavigationActionPolicy.Cancel : WKNavigationActionPolicy.Allow;
 
-			if (cancel == WKNavigationActionPolicy.Cancel)
+			if (action == WKNavigationActionPolicy.Cancel)
 				WebView.SendNavigationCancelled(new NavigationCancelledEventArgs(args.Url));
 
-			decisionHandler(cancel);
-		}
+            decisionHandler(action);
+        }
 	}
 }

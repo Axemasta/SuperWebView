@@ -11,8 +11,8 @@
         <Grid RowDefinitions="Auto, *" RowSpacing="0">
 
             <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *, Auto" Style="{DynamicResource BackgroundPanel}" Padding="10" RowDefinitions="*, Auto" ColumnSpacing="10" RowSpacing="0">
-                <Button Text="{ap:Icon 'fas fa-chevron-left'}" Grid.Column="0"/>
-                <Button Text="{ap:Icon 'fas fa-chevron-right'}" Grid.Column="1"/>
+                <Button x:Name="backButton" Text="{ap:Icon 'fas fa-chevron-left'}" Grid.Column="0"/>
+                <Button x:Name="forwardButton" Text="{ap:Icon 'fas fa-chevron-right'}" Grid.Column="1"/>
 
                 <yummy:PancakeView Grid.Column="2" CornerRadius="10" Style="{DynamicResource AddressBarPancake}">
                     <Grid RowDefinitions="*, Auto" RowSpacing="0" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" ColumnSpacing="0" Style="{DynamicResource ForegroundPanel}">
@@ -32,7 +32,7 @@
                     </Grid>
                 </yummy:PancakeView>
 
-                <Button Text="{ap:Icon 'fas fa-redo-alt'}" Grid.Column="3"/>
+                <Button x:Name="reloadButton" Text="{ap:Icon 'fas fa-redo-alt'}" Grid.Column="3"/>
             </Grid>
 
             <super:SuperWebView x:Name="superWebView" Source="https://www.google.co.uk" Grid.Row="1"/>

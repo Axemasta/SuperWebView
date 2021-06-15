@@ -265,8 +265,16 @@ namespace Axemasta.SuperWebView.iOS
 
         public void UpdateCanGoBackForward()
         {
-            ((ISuperWebViewController)WebView).CanGoBack = CanGoBack;
-            ((ISuperWebViewController)WebView).CanGoForward = CanGoForward;
+            ISuperWebViewController webViewController = WebView as ISuperWebViewController;
+
+            if (webViewController is null)
+            {
+                Log.Warning(nameof(SuperWkWebViewRenderer), $"Could not cast {nameof(WebView)} as {nameof(ISuperWebViewController)}");
+                return;
+            }
+
+            webViewController.CanGoBack = CanGoBack;
+            webViewController.CanGoForward = CanGoForward;
         }
 
         public void DidReceiveScriptMessage(WKUserContentController userContentController, WKScriptMessage message)
@@ -351,7 +359,7 @@ namespace Axemasta.SuperWebView.iOS
             if (CanGoBack)
             {
                 _lastBackForwardEvent = WebNavigationEvent.Back;
-                GoBack();
+                this.GoBack();
             }
 
             UpdateCanGoBackForward();
@@ -362,7 +370,7 @@ namespace Axemasta.SuperWebView.iOS
             if (CanGoForward)
             {
                 _lastBackForwardEvent = WebNavigationEvent.Forward;
-                GoForward();
+                this.GoForward();
             }
 
             UpdateCanGoBackForward();
