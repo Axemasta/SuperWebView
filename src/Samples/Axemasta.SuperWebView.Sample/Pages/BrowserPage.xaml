@@ -10,7 +10,7 @@
     <ContentPage.Content>
         <Grid RowDefinitions="Auto, *" RowSpacing="0">
 
-            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *, Auto" Style="{DynamicResource BackgroundPanel}" Padding="10" RowDefinitions="*, Auto" ColumnSpacing="10" RowSpacing="0">
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *, Auto, Auto" Style="{DynamicResource BackgroundPanel}" Padding="10" RowDefinitions="*, Auto" ColumnSpacing="10" RowSpacing="0">
                 <Button x:Name="backButton" Text="{ap:Icon 'fas fa-chevron-left'}" Grid.Column="0"/>
                 <Button x:Name="forwardButton" Text="{ap:Icon 'fas fa-chevron-right'}" Grid.Column="1"/>
 
@@ -33,6 +33,7 @@
                 </yummy:PancakeView>
 
                 <Button x:Name="reloadButton" Text="{ap:Icon 'fas fa-redo-alt'}" Grid.Column="3"/>
+                <Button x:Name="localPage" Text="{ap:Icon 'far fa-file-code'}" Grid.Column="4"/>
             </Grid>
 
             <super:SuperWebView x:Name="superWebView" Source="https://www.google.co.uk" Grid.Row="1"/>

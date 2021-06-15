@@ -122,6 +122,17 @@ namespace Axemasta.SuperWebView.iOS
 
 			/* Without this the deferral token will cause a completely undiagnosable termination **/
 
+			if (lastUrl.StartsWith("file://"))
+            {
+				var backArgs = new SuperWebNavigatingEventArgs(navEvent, new SuperUrlWebViewSource { Url = lastUrl }, lastUrl, false);
+
+				WebView.SendNavigating(backArgs);
+				_renderer.UpdateCanGoBackForward();
+
+				decisionHandler(WKNavigationActionPolicy.Allow);
+				return;
+			}
+
 			if (SiteAlreadyVisited(_renderer.BackForwardList, lastUrl))
             {
 				var backArgs = new SuperWebNavigatingEventArgs(navEvent, new SuperUrlWebViewSource { Url = lastUrl }, lastUrl, false);

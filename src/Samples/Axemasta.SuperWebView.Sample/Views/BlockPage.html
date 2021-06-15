@@ -4,12 +4,159 @@
     <meta charset="utf-8" />
     <title>Block Page</title>
     <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-    <body>
-        <div class="text-center">
-            <h1 class="h3 mb-3 font-weight-normal">Site Blocked</h1>
 
-            <p>Please ask for permission to browse this site</p>
+    <style>
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+        }
+
+        body {
+            background-color: rgb(50, 150, 196);
+            background-image: url('https://venngage-wordpress.s3.amazonaws.com/uploads/2018/09/Colorful-Geometric-Simple-Background-Image.jpg');
+            background-position: center;
+            background-size: cover;
+            background-color: #cccccc;
+            background-repeat: no-repeat;
+            font-family: 'Roboto', sans-serif;
+            color: #FFFFFF;
+            font-size: 1rem;
+            line-height: 1.4;
+            overflow: hidden;
+        }
+
+        small > img {
+            display: inline-block;
+            height: .7rem;
+            margin-bottom: 2px;
+        }
+
+        .panel-title {
+            margin-bottom: 1rem;
+        }
+
+        .category-text > strong {
+            color: rgb(50, 150, 196);
+        }
+
+        .panel-title > h3 {
+            color: rgb(219, 219, 219);
+        }
+
+        .header-icon {
+            font-size: 86px;
+            color: rgb(50, 150, 196);
+            width: 68px;
+            margin-top: -8px;
+            line-height: 0;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .panel.panel-filled {
+            background-color: rgba(68, 70, 79, 0.5);
+        }
+
+        .panel {
+            background-color: transparent;
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+            color: #DBDBDB;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .container-center {
+            min-width: 40%;
+            max-width: 700px;
+            margin: 10% auto 0;
+            padding: 20px;
+        }
+
+        .view-footer {
+            margin-top: -15px;
+        }
+
+        .content {
+            margin-top: 60px;
+            position: relative;
+            padding: 30px;
+            transition: margin-left 0.3s ease-out;
+            -webkit-transition: margin-left 0.3s ease-out;
+        }
+
+        @media (max-width: 767px) {
+            .content {
+                margin-left: 0;
+                padding: 30px 0 10px 0;
+            }
+        }
+
+        body.blank .content {
+            margin: 0;
+        }
+
+        .row {
+            margin-left: -10px;
+            margin-right: -10px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #FFFFFF;
+            line-height: 1.1;
+        }
+
+        h1,
+        .h1,
+        h2,
+        .h2,
+        h3,
+        .h3 {
+            margin-top: 10px;
+        }
+
+        h4,
+        .h4,
+        h5,
+        .h5,
+        h6,
+        .h6 {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .panel .panel-body {
+            padding: 5px 15px 15px 15px;
+        }
+
+        .panel.panel-filled .panel-body {
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <section class="content">
+        <div class="container-center">
+            <div class="panel panel-filled">
+                <div class="panel-body">
+
+                    <div class="panel-title text-center">
+                        <h4>Local Page</h4>
+                    </div>
+
+                    <div class="url-example text-center">
+                        <p>This is a local html page being displayed!</p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </body>
+    </section>
+</body>
 </html>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Axemasta.SuperWebView.Sample.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
@@ -9,6 +10,32 @@ namespace Axemasta.SuperWebView.Sample.Pages
 {
     public partial class BrowserPage : ContentPage
     {
+        Lazy<string> _blockPage;
+        Lazy<string> _localBaseUrl;
+
+        string LoadBlockPage()
+        {
+            Debug.WriteLine("LoadBlockPage - Executing lazy load");
+
+            var assemblyName = typeof(BrowserPage).Assembly.FullName;
+
+            var page = EmbeddedResourceHelper.Load("Axemasta.SuperWebView.Sample.Views.BlockPage.html", assemblyName);
+
+            return page;
+        }
+
+        string LoadBaseUrl()
+        {
+            Debug.WriteLine("LoadBaseUrl - Executing lazy load");
+
+            var urlProvider = DependencyService.Get<IUrlProvider>();
+
+            if (urlProvider is null)
+                return string.Empty;
+
+            return urlProvider.GetBaseUrl();
+        }
+
         public BrowserPage()
         {
             InitializeComponent();
@@ -16,9 +43,13 @@ namespace Axemasta.SuperWebView.Sample.Pages
             On<Xamarin.Forms.PlatformConfiguration.iOS>()
                 .SetUseSafeArea(true);
 
+            _blockPage = new Lazy<string>(LoadBlockPage, true);
+            _localBaseUrl = new Lazy<string>(LoadBaseUrl, true);
+
             backButton.Clicked += OnBackRequested;
             forwardButton.Clicked += OnForwardRequested;
             reloadButton.Clicked += OnReloadRequested;
+            localPage.Clicked += OnLocalPage;
 
             superWebView.Navigating += OnNavigating;
             superWebView.Navigated += OnNavigated;
@@ -37,6 +68,22 @@ namespace Axemasta.SuperWebView.Sample.Pages
             };
 
             superWebView.InjectJavascript(scripts);
+        }
+
+        private void OnLocalPage(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Load local page");
+
+            var html = _blockPage.Value;
+            var baseUrl = _localBaseUrl.Value;
+
+            var htmlWebSource = new SuperHtmlWebViewSource()
+            {
+                Html = html,
+                BaseUrl = baseUrl
+            };
+
+            superWebView.Source = htmlWebSource;
         }
 
         private void OnCanGoForwardChanged(object sender, EventArgs e)
