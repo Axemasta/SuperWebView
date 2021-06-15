@@ -16,7 +16,7 @@ namespace Axemasta.SuperWebView
 		}
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void Load(IWebViewDelegate renderer)
+		public override void Load(ISuperWebViewDelegate renderer)
 		{
 			renderer.LoadUrl(Url);
 		}

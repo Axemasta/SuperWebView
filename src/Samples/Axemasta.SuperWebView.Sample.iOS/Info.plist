@@ -34,5 +34,7 @@
 	<string>Axemasta.SuperWebView.Sample</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>NSUserTrackingUserDescription</key>
+	<string>Allow this app to track usage?</string>
 </dict>
 </plist>

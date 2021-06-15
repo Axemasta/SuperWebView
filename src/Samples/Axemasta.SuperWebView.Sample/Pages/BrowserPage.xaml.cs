@@ -58,6 +58,7 @@ namespace Axemasta.SuperWebView.Sample.Pages
             superWebView.BrowserInvocation += OnBrowserInvocation;
             superWebView.CanGoBackChanged += OnCanGoBackChanged;
             superWebView.CanGoForwardChanged += OnCanGoForwardChanged;
+            superWebView.UrlPropertyChanged += OnUrlChanged;
 
             var assemblyName = this.GetType().Assembly.FullName;
 
@@ -70,6 +71,11 @@ namespace Axemasta.SuperWebView.Sample.Pages
             superWebView.InjectJavascript(scripts);
         }
 
+        private void OnUrlChanged(object sender, UrlEventArgs e)
+        {
+            addressLabel.Text = e.NewUrl;
+        }
+
         private void OnLocalPage(object sender, EventArgs e)
         {
             Debug.WriteLine("Load local page");
@@ -80,7 +86,8 @@ namespace Axemasta.SuperWebView.Sample.Pages
             var htmlWebSource = new SuperHtmlWebViewSource()
             {
                 Html = html,
-                BaseUrl = baseUrl
+                BaseUrl = baseUrl,
+                Title = "My Cool Page"
             };
 
             superWebView.Source = htmlWebSource;
@@ -151,8 +158,6 @@ namespace Axemasta.SuperWebView.Sample.Pages
         private void OnNavigated(object sender, SuperWebNavigatedEventArgs e)
         {
             Debug.WriteLine($"OnNavigated Fired - {e.Url}");
-
-            addressLabel.Text = e.Url;
         }
 
         private async Task<bool> CanBrowse(string url)

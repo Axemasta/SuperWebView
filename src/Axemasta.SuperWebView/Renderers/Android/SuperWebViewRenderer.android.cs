@@ -15,7 +15,7 @@ using Axemasta.SuperWebView.Internals;
 
 namespace Axemasta.SuperWebView.Droid
 {
-    public class SuperWebViewRenderer : ViewRenderer<SuperWebView, AWebView>, IWebViewDelegate
+    public class SuperWebViewRenderer : ViewRenderer<SuperWebView, AWebView>, ISuperWebViewDelegate
     {
         WebNavigationEvent _eventState;
         FormsSuperWebViewClient _webViewClient;
@@ -36,6 +36,14 @@ namespace Axemasta.SuperWebView.Droid
         {
             _eventState = WebNavigationEvent.NewPage;
             Control.LoadDataWithBaseURL(baseUrl ?? AndroidConstants.AssetBaseUrl, html, "text/html", "UTF-8", null);
+        }
+
+        public void LoadHtml(string html, string baseUrl, string title)
+        {
+            _eventState = WebNavigationEvent.NewPage;
+            Control.LoadDataWithBaseURL(baseUrl ?? AndroidConstants.AssetBaseUrl, html, "text/html", "UTF-8", null);
+
+            SuperWebView.SendUrlChanged(new UrlEventArgs(title));
         }
 
         public void LoadUrl(string url)

@@ -45,6 +45,8 @@ namespace Axemasta.SuperWebView
 
 		static readonly BindablePropertyKey ProgressPropertyKey = BindableProperty.CreateReadOnly(nameof(Progress), typeof(double), typeof(SuperWebView), (double)0);
 
+		public static readonly BindableProperty UriProperty = BindableProperty.Create(nameof(Uri), typeof(string), typeof(SuperWebView), default(string), BindingMode.OneWayToSource);
+
 		public static readonly BindableProperty ProgressProperty = ProgressPropertyKey.BindableProperty;
 
 		readonly Lazy<PlatformConfigurationRegistry<SuperWebView>> _platformConfigurationRegistry;
@@ -102,6 +104,12 @@ namespace Axemasta.SuperWebView
 		{
 			get => (double)GetValue(ProgressProperty);
 			set => SetValue(ProgressProperty, value);
+		}
+
+		public string Uri
+		{
+			get => (string)GetValue(UriProperty);
+			set => SetValue(UriProperty, value);
 		}
 
 		public void Eval(string script)
@@ -219,6 +227,8 @@ namespace Axemasta.SuperWebView
 
 		public event EventHandler<ProgressEventArgs> ProgressChanged;
 
+		public event EventHandler<UrlEventArgs> UrlPropertyChanged;
+
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public void SendNavigated(SuperWebNavigatedEventArgs args)
 		{
@@ -266,6 +276,16 @@ namespace Axemasta.SuperWebView
         {
 			NavigationCancelled?.Invoke(this, args);
         }
+
+		/// <summary>
+		/// Send Url Changed
+		/// </summary>
+		/// <param name="args"></param>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public void SendUrlChanged(UrlEventArgs args)
+		{
+			UrlPropertyChanged?.Invoke(this, args);
+		}
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public event EventHandler RendererInitialised;

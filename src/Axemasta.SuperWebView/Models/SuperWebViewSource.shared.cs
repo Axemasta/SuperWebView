@@ -24,7 +24,7 @@ namespace Axemasta.SuperWebView
 		}
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		public abstract void Load(IWebViewDelegate renderer);
+		public abstract void Load(ISuperWebViewDelegate renderer);
 
 		internal event EventHandler SourceChanged;
 	}

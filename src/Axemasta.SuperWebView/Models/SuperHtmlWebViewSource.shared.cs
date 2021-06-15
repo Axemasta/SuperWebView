@@ -5,10 +5,13 @@ namespace Axemasta.SuperWebView
 {
     public class SuperHtmlWebViewSource : SuperWebViewSource
     {
-		public static readonly BindableProperty HtmlProperty = BindableProperty.Create(nameof(Html), typeof(string), typeof(HtmlWebViewSource), default(string),
+		public static readonly BindableProperty HtmlProperty = BindableProperty.Create(nameof(Html), typeof(string), typeof(SuperHtmlWebViewSource), default(string),
 			propertyChanged: (bindable, oldvalue, newvalue) => ((SuperHtmlWebViewSource)bindable).OnSourceChanged());
 
-		public static readonly BindableProperty BaseUrlProperty = BindableProperty.Create(nameof(BaseUrl), typeof(string), typeof(HtmlWebViewSource), default(string),
+		public static readonly BindableProperty BaseUrlProperty = BindableProperty.Create(nameof(BaseUrl), typeof(string), typeof(SuperHtmlWebViewSource), default(string),
+			propertyChanged: (bindable, oldvalue, newvalue) => ((SuperHtmlWebViewSource)bindable).OnSourceChanged());
+
+		public static readonly BindableProperty TitleProperty = BindableProperty.Create(nameof(Title), typeof(string), typeof(SuperHtmlWebViewSource), default(string),
 			propertyChanged: (bindable, oldvalue, newvalue) => ((SuperHtmlWebViewSource)bindable).OnSourceChanged());
 
 		public string BaseUrl
@@ -23,10 +26,23 @@ namespace Axemasta.SuperWebView
 			set { SetValue(HtmlProperty, value); }
 		}
 
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override void Load(IWebViewDelegate renderer)
+		public string Title
 		{
-			renderer.LoadHtml(Html, BaseUrl);
+			get { return (string)GetValue(TitleProperty); }
+			set { SetValue(TitleProperty, value); }
+		}
+
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public override void Load(ISuperWebViewDelegate renderer)
+		{
+			var title = Title;
+
+			if (string.IsNullOrEmpty(title))
+            {
+				title = "Local File";
+            }
+
+			renderer.LoadHtml(Html, BaseUrl, title);
 		}
 	}
 }

@@ -19,7 +19,7 @@ using RectangleF = System.Drawing.RectangleF;
 
 namespace Axemasta.SuperWebView.iOS
 {
-    public class SuperWkWebViewRenderer : WKWebView, IVisualElementRenderer, IWebViewDelegate, IEffectControlProvider, ITabStop, IWKScriptMessageHandler
+    public class SuperWkWebViewRenderer : WKWebView, IVisualElementRenderer, ISuperWebViewDelegate, IEffectControlProvider, ITabStop, IWKScriptMessageHandler
 	{
         public SuperWebView WebView => Element as SuperWebView;
 
@@ -117,6 +117,9 @@ namespace Axemasta.SuperWebView.iOS
                     var progress = AddObserver(iOSConstants.EstimatedProgress, NSKeyValueObservingOptions.New, OnProgressUpdated);
                     _disposables.Add(progress);
 
+                    var urlChanged = AddObserver(iOSConstants.Url, NSKeyValueObservingOptions.New, OnUrlChanged);
+                    _disposables.Add(urlChanged);
+
                     _tracker = new VisualElementTracker(this);
 
                     _packager = new VisualElementPackager(this);
@@ -139,6 +142,20 @@ namespace Axemasta.SuperWebView.iOS
 
             if (Element != null && !string.IsNullOrEmpty(Element.AutomationId))
                 AccessibilityIdentifier = Element.AutomationId;
+        }
+
+        private void OnUrlChanged(NSObservedChange nSObservedChange)
+        {
+            string url = nSObservedChange.NewValue.ToString();
+
+            if (url.StartsWith("file://"))
+            {
+                return;
+            }
+
+            var args = new UrlEventArgs(url);
+
+            WebView.SendUrlChanged(args);
         }
 
         private void InjectJSBridge()
@@ -183,6 +200,18 @@ namespace Axemasta.SuperWebView.iOS
         public void SetElementSize(Size size)
         {
             Layout.LayoutChildIntoBoundingRegion(Element, new Rectangle(Element.X, Element.Y, size.Width, size.Height));
+        }
+
+        public void LoadHtml(string html, string baseUrl, string title)
+        {
+            if (html is null)
+                return;
+
+            var url = baseUrl == null ? new NSUrl(NSBundle.MainBundle.BundlePath, true) : new NSUrl(baseUrl, true);
+            
+            LoadHtmlString(html, url);
+
+            WebView.SendUrlChanged(new UrlEventArgs(title));
         }
 
         public void LoadHtml(string html, string baseUrl)
