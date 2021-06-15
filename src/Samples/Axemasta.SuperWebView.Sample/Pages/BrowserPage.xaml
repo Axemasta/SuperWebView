@@ -2,14 +2,38 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ap="http://avantipoint.com/mobiletoolkit"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:super="clr-namespace:Axemasta.SuperWebView;assembly=Axemasta.SuperWebView"
-    x:Class="Axemasta.SuperWebView.Sample.Pages.BrowserPage">
+    x:Class="Axemasta.SuperWebView.Sample.Pages.BrowserPage"
+    Style="{DynamicResource BaseContentPage}">
     <ContentPage.Content>
-        <Grid RowDefinitions="Auto, *">
+        <Grid RowDefinitions="Auto, *" RowSpacing="0">
 
-            <Frame Padding="20" BackgroundColor="Orange" CornerRadius="0" HasShadow="False">
-                <Label Text="SuperWebView Sample" FontSize="Title" HorizontalTextAlignment="Center"/>
-            </Frame>
+            <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *, Auto" Style="{DynamicResource BackgroundPanel}" Padding="10" RowDefinitions="*, Auto" ColumnSpacing="10" RowSpacing="0">
+                <Button Text="{ap:Icon 'fas fa-chevron-left'}" Grid.Column="0"/>
+                <Button Text="{ap:Icon 'fas fa-chevron-right'}" Grid.Column="1"/>
+
+                <yummy:PancakeView Grid.Column="2" CornerRadius="10" Style="{DynamicResource AddressBarPancake}">
+                    <Grid RowDefinitions="*, Auto" RowSpacing="0" HorizontalOptions="Fill" VerticalOptions="Fill" Padding="0" ColumnSpacing="0" Style="{DynamicResource ForegroundPanel}">
+
+                        <Label x:Name="addressLabel"
+                               MaxLines="1"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               Margin="10, 0"
+                               Grid.Row="0"/>
+
+                        <ProgressBar x:Name="progressBar"
+                                     Progress="0.5"
+                                     Grid.Row="1"
+                                     VerticalOptions="End"/>
+                    </Grid>
+                </yummy:PancakeView>
+
+                <Button Text="{ap:Icon 'fas fa-redo-alt'}" Grid.Column="3"/>
+            </Grid>
 
             <super:SuperWebView x:Name="superWebView" Source="https://www.google.co.uk" Grid.Row="1"/>
         </Grid>

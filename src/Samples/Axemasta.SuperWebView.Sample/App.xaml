@@ -1,8 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              x:Class="Axemasta.SuperWebView.Sample.App">
     <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="BackgroundColor_LightMode">#F2F2F7</Color>
+            <Color x:Key="ForegroundColor_LightMode">#FFFFFF</Color>
+            <Color x:Key="AccentColor_LightMode">#EDEDEE</Color>
+            <Color x:Key="TextColor_LightMode">#333d37</Color>
 
+            <Color x:Key="BackgroundColor_DarkMode">#Black</Color>
+            <Color x:Key="ForegroundColor_DarkMode">#1C1C1E</Color>
+            <Color x:Key="AccentColor_DarkMode">#3a3a3c</Color>
+            <Color x:Key="TextColor_DarkMode">#FFFFFF</Color>
+
+            <Style x:Key="BackgroundPanel" TargetType="Grid">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColor_DarkMode}, Light={StaticResource BackgroundColor_LightMode}}" />
+            </Style>
+
+            <Style x:Key="ForegroundPanel" TargetType="Grid">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource ForegroundColor_DarkMode}, Light={StaticResource ForegroundColor_LightMode}}" />
+            </Style>
+                
+            <yummy:Border x:Key="seperatorBorderLight">
+                <yummy:Border.Color>#DEDEE0</yummy:Border.Color>
+                <yummy:Border.Thickness>1</yummy:Border.Thickness>
+            </yummy:Border>
+
+            <yummy:Border x:Key="seperatorBorderDark">
+                <yummy:Border.Color>#323234</yummy:Border.Color>
+                <yummy:Border.Thickness>1</yummy:Border.Thickness>
+            </yummy:Border>
+
+            <Style x:Key="AddressBarPancake" TargetType="yummy:PancakeView">
+                <Setter Property="Border" Value="{AppThemeBinding Dark={StaticResource seperatorBorderDark}, Light={StaticResource seperatorBorderLight}}" />
+            </Style>
+
+            <Style TargetType="Label" ApplyToDerivedTypes="True">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextColor_DarkMode}, Light={StaticResource TextColor_LightMode}}"/>
+            </Style>
+
+            <Style TargetType="Button" ApplyToDerivedTypes="True">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextColor_DarkMode}, Light={StaticResource TextColor_LightMode}}"/>
+            </Style>
+
+            <Style x:Key="BaseContentPage" TargetType="ContentPage">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColor_DarkMode}, Light={StaticResource BackgroundColor_LightMode}}"/>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

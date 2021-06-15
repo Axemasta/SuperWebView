@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Axemasta.SuperWebView.Sample.Pages
 {
@@ -11,6 +12,9 @@ namespace Axemasta.SuperWebView.Sample.Pages
         public BrowserPage()
         {
             InitializeComponent();
+
+            On<Xamarin.Forms.PlatformConfiguration.iOS>()
+                .SetUseSafeArea(true);
 
             superWebView.Navigating += OnNavigating;
             superWebView.Navigated += OnNavigated;
@@ -42,7 +46,11 @@ namespace Axemasta.SuperWebView.Sample.Pages
         private void OnProgress(object sender, ProgressEventArgs e)
         {
             Debug.WriteLine($"OnProgress: {e.PercentageComplete}%");
-            Debug.WriteLine($"OnProgress - Raw: {e.RawProgress}");
+            Debug.WriteLine($"OnProgress - Raw: {e.NormalisedProgress}");
+
+            var progress = e.PercentageComplete / 100; // XF ProgressBar accepts 0-1
+
+            progressBar.ProgressTo(progress, 250, Easing.SinIn);
         }
 
         private async void OnNavigating(object sender, SuperWebNavigatingEventArgs e)
@@ -62,6 +70,8 @@ namespace Axemasta.SuperWebView.Sample.Pages
         private void OnNavigated(object sender, SuperWebNavigatedEventArgs e)
         {
             Debug.WriteLine($"OnNavigated Fired - {e.Url}");
+
+            addressLabel.Text = e.Url;
         }
 
         private async Task<bool> CanBrowse(string url)

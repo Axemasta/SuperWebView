@@ -13,6 +13,11 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="AvantiPoint.MobileToolkit.Forms.Fonts" Version="4.0.62" />
+    <PackageReference Include="AvantiPoint.MobileToolkit.Forms.Fonts.FontAwesomeFree.Solid" Version="4.0.62" />
+    <PackageReference Include="AvantiPoint.MobileToolkit.Forms.Fonts.FontAwesomeFree.Regular" Version="4.0.62" />
+    <PackageReference Include="AvantiPoint.MobileToolkit.Forms.Fonts.FontAwesomeFree.Brands" Version="4.0.62" />
+    <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.759" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Axemasta.SuperWebView\Axemasta.SuperWebView.csproj" />
@@ -20,6 +25,7 @@
   <ItemGroup>
     <Folder Include="Pages\" />
     <Folder Include="Scripts\" />
+    <Folder Include="Views\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Scripts\jquery-3.5.1.min.js" />

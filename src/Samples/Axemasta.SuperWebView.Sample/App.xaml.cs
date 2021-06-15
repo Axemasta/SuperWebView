@@ -1,4 +1,5 @@
 ﻿using System;
+using AP.MobileToolkit.Fonts;
 using Axemasta.SuperWebView.Sample.Pages;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,6 +11,10 @@ namespace Axemasta.SuperWebView.Sample
         public App()
         {
             InitializeComponent();
+
+            FontRegistry.RegisterFonts(FontAwesomeBrands.Font,
+                                       FontAwesomeRegular.Font,
+                                       FontAwesomeSolid.Font);
 
             MainPage = new BrowserPage();
         }
