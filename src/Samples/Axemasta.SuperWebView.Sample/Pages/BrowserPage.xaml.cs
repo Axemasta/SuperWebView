@@ -87,7 +87,7 @@ namespace Axemasta.SuperWebView.Sample.Pages
             {
                 Html = html,
                 BaseUrl = baseUrl,
-                Title = "My Cool Page"
+                Title = "My Cool Local Page"
             };
 
             superWebView.Source = htmlWebSource;

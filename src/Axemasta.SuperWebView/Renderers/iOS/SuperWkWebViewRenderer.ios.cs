@@ -208,20 +208,17 @@ namespace Axemasta.SuperWebView.iOS
                 return;
 
             var url = baseUrl == null ? new NSUrl(NSBundle.MainBundle.BundlePath, true) : new NSUrl(baseUrl, true);
-            
+
+            var titleUrl = !string.IsNullOrEmpty(title) ? title : url.AbsoluteString;
+
             LoadHtmlString(html, url);
 
-            WebView.SendUrlChanged(new UrlEventArgs(title));
+            WebView.SendUrlChanged(new UrlEventArgs(titleUrl));
         }
 
         public void LoadHtml(string html, string baseUrl)
         {
-            if (html is null)
-                return;
-
-            var url = baseUrl == null ? new NSUrl(NSBundle.MainBundle.BundlePath, true) : new NSUrl(baseUrl, true);
-
-            LoadHtmlString(html, url);
+            LoadHtml(html, baseUrl, null);
         }
 
         public async void LoadUrl(string url)

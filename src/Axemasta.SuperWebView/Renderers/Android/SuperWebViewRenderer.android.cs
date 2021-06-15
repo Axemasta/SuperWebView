@@ -49,6 +49,8 @@ namespace Axemasta.SuperWebView.Droid
         public void LoadUrl(string url)
         {
             LoadUrl(url, true);
+
+            SuperWebView.SendUrlChanged(new UrlEventArgs(url));
         }
 
         async void LoadUrl(string url, bool fireNavigatingCanceled)
@@ -438,8 +440,12 @@ namespace Axemasta.SuperWebView.Droid
         {
             if (Element == null || Control == null)
                 return;
+
             ElementController.CanGoBack = Control.CanGoBack();
             ElementController.CanGoForward = Control.CanGoForward();
+
+            SuperWebView.SendCanGoBackwardsChanged(EventArgs.Empty);
+            SuperWebView.SendCanGoForwardsChanged(EventArgs.Empty);
         }
 
         void UpdateMixedContentMode()

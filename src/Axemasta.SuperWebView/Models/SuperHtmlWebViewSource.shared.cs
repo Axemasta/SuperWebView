@@ -35,14 +35,14 @@ namespace Axemasta.SuperWebView
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public override void Load(ISuperWebViewDelegate renderer)
 		{
-			var title = Title;
-
-			if (string.IsNullOrEmpty(title))
+			if (string.IsNullOrEmpty(Title))
             {
-				title = "Local File";
-            }
-
-			renderer.LoadHtml(Html, BaseUrl, title);
+				renderer.LoadHtml(Html, BaseUrl);
+			}
+			else
+            {
+				renderer.LoadHtml(Html, BaseUrl, Title);
+			}
 		}
 	}
 }
