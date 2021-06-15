@@ -25,6 +25,8 @@ namespace Axemasta.SuperWebView.Sample.Pages
             superWebView.NavigationCancelled += OnNavigationCancelled;
             superWebView.ProgressChanged += OnProgress;
             superWebView.BrowserInvocation += OnBrowserInvocation;
+            superWebView.CanGoBackChanged += OnCanGoBackChanged;
+            superWebView.CanGoForwardChanged += OnCanGoForwardChanged;
 
             var assemblyName = this.GetType().Assembly.FullName;
 
@@ -37,6 +39,16 @@ namespace Axemasta.SuperWebView.Sample.Pages
             superWebView.InjectJavascript(scripts);
         }
 
+        private void OnCanGoForwardChanged(object sender, EventArgs e)
+        {
+            backButton.IsEnabled = superWebView.CanGoBack;
+        }
+
+        private void OnCanGoBackChanged(object sender, EventArgs e)
+        {
+            forwardButton.IsEnabled = superWebView.CanGoForward;
+        }
+
         private void OnReloadRequested(object sender, EventArgs e)
         {
             superWebView.Reload();
@@ -45,21 +57,11 @@ namespace Axemasta.SuperWebView.Sample.Pages
         private void OnForwardRequested(object sender, EventArgs e)
         {
             superWebView.GoForward();
-
-            UpdateCanGoBackForward();
         }
 
         private void OnBackRequested(object sender, EventArgs e)
         {
             superWebView.GoBack();
-
-            UpdateCanGoBackForward();
-        }
-
-        private void UpdateCanGoBackForward()
-        {
-            forwardButton.IsEnabled = superWebView.CanGoForward;
-            backButton.IsEnabled = superWebView.CanGoBack;
         }
 
         private void OnBrowserInvocation(object sender, BrowserInvocationEventArgs e)
@@ -104,8 +106,6 @@ namespace Axemasta.SuperWebView.Sample.Pages
             Debug.WriteLine($"OnNavigated Fired - {e.Url}");
 
             addressLabel.Text = e.Url;
-
-            UpdateCanGoBackForward();
         }
 
         private async Task<bool> CanBrowse(string url)

@@ -153,9 +153,13 @@ namespace Axemasta.SuperWebView
 
 		public event EventHandler<NavigationCancelledEventArgs> NavigationCancelled;
 
+		public event EventHandler<EventArgs> CanGoBackChanged;
+
+		public event EventHandler<EventArgs> CanGoForwardChanged;
+
 		/// <summary>
-        /// Called When WebView Javascript Calls Back To The App
-        /// </summary>
+		/// Called When WebView Javascript Calls Back To The App
+		/// </summary>
 		public event EventHandler<BrowserInvocationEventArgs> BrowserInvocation;
 
 		public void SendBrowserInvocation(BrowserInvocationEventArgs args)
@@ -230,11 +234,23 @@ namespace Axemasta.SuperWebView
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public event EventHandler ReloadRequested;
 
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public void SendCanGoBackwardsChanged(EventArgs args)
+		{
+			CanGoBackChanged?.Invoke(this, args);
+		}
+
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public void SendCanGoForwardsChanged(EventArgs args)
+		{
+			CanGoForwardChanged?.Invoke(this, args);
+		}
+
 		/// <summary>
-        /// Send Progress Update
-        /// </summary>
-        /// <param name="progress"></param>
-        /// <param name="maximum"></param>
+		/// Send Progress Update
+		/// </summary>
+		/// <param name="progress"></param>
+		/// <param name="maximum"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public void SendProgressChanged(ProgressEventArgs args)
         {
