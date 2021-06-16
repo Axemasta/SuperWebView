@@ -21,7 +21,7 @@ namespace Axemasta.SuperWebView.Droid
 
 		public FormsSuperWebViewClient(SuperWebViewRenderer renderer)
         {
-			_renderer = renderer ?? throw new ArgumentNullException("renderer");
+			_renderer = renderer ?? throw new ArgumentNullException(nameof(renderer));
 			_scripts = new List<string>();
 		}
 

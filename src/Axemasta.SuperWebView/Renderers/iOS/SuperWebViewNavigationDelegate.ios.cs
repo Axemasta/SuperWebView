@@ -9,6 +9,10 @@ namespace Axemasta.SuperWebView.iOS
 {
     public class SuperWebViewNavigationDelegate : WKNavigationDelegate
     {
+		private NSUrl _lastWebsite;
+
+		private bool _pageIsLocal;
+
 		readonly SuperWkWebViewRenderer _renderer;
 		WebNavigationEvent _lastEvent;
 
@@ -18,6 +22,8 @@ namespace Axemasta.SuperWebView.iOS
 				throw new ArgumentNullException(nameof(renderer));
 
 			_renderer = renderer;
+
+			_pageIsLocal = false;
 		}
 
 		SuperWebView WebView => _renderer.WebView;
@@ -47,6 +53,16 @@ namespace Axemasta.SuperWebView.iOS
 			_renderer.UpdateCanGoBackForward();
 		}
 
+		public bool IsPageLocal()
+        {
+			return _pageIsLocal;
+        }
+
+		public NSUrl GetLastWebsite()
+        {
+			return _lastWebsite;
+        }
+
 		public override void DidFinishNavigation(WKWebView webView, WKNavigation navigation)
 		{
 			if (webView.IsLoading)
@@ -54,17 +70,31 @@ namespace Axemasta.SuperWebView.iOS
 
 			var url = GetCurrentUrl();
 			if (url == $"file://{NSBundle.MainBundle.BundlePath}/")
+            {
+				ProcessNavigatedToLocal(url);
 				return;
+            }
+
+			_lastWebsite = _renderer?.Url;
 
 			_renderer._ignoreSourceChanges = true;
 			WebView.SetValueFromRenderer(SuperWebView.SourceProperty, new SuperUrlWebViewSource { Url = url });
 			_renderer._ignoreSourceChanges = false;
 
-			ProcessNavigated(url);
+			ProcessNavigatedToWebsite(url);
 		}
 
-		async void ProcessNavigated(string url)
+		public void ProcessNavigatedToLocal(string url)
 		{
+			_pageIsLocal = true;
+			var args = new SuperWebNavigatedEventArgs(_lastEvent, WebView.Source, url, WebNavigationResult.Success);
+			WebView.SendNavigated(args);
+			_renderer.UpdateCanGoBackForward();
+		}
+
+		async void ProcessNavigatedToWebsite(string url)
+		{
+			_pageIsLocal = false;
 			try
 			{
 				if (_renderer?.WebView?.Cookies != null)
@@ -78,7 +108,6 @@ namespace Axemasta.SuperWebView.iOS
 			var args = new SuperWebNavigatedEventArgs(_lastEvent, WebView.Source, url, WebNavigationResult.Success);
 			WebView.SendNavigated(args);
 			_renderer.UpdateCanGoBackForward();
-
 		}
 
 		public override void DidStartProvisionalNavigation(WKWebView webView, WKNavigation navigation)
@@ -163,24 +192,40 @@ namespace Axemasta.SuperWebView.iOS
 			}
 		}
 
+		bool UrlMatches(NSUrl url1, NSUrl url2)
+        {
+			if (url1 == null || url2 == null)
+				return false;
+
+			if (url1 == url2)
+				return true;
+
+			if (url1.AbsoluteString.Contains(url2.AbsoluteString))
+				return true;
+
+			if (url2.AbsoluteString.Contains(url1.AbsoluteString))
+				return true;
+
+			return false;
+        }
+
 		bool SiteAlreadyVisited(WKBackForwardList wkBackForwardList, string url)
         {
 			if (wkBackForwardList is null) return false;
-			if (wkBackForwardList.BackItem is null) return false;
-			if (wkBackForwardList.CurrentItem is null) return false;
+			if (wkBackForwardList.BackItem is null && wkBackForwardList.CurrentItem is null) return false;
 
 			try
             {
 				var nsUrl = new NSUrl(url);
 
-				if (wkBackForwardList.CurrentItem.Url == nsUrl)
+				if (UrlMatches(wkBackForwardList.CurrentItem.Url, nsUrl))
 					return true;
 
 				var backItems = wkBackForwardList.BackList;
 
                 foreach (var backItem in backItems)
                 {
-					if (backItem.Url == nsUrl)
+					if (UrlMatches(backItem.Url, nsUrl))
 						return true;
                 }
             }

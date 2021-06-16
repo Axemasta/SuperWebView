@@ -54,6 +54,8 @@ namespace Axemasta.SuperWebView.iOS
         string _pendingUrl;
         EventTracker _events;
 
+        private readonly SuperWebViewNavigationDelegate _navigationDelegate;
+
         private WKUserContentController _userController;
 
         VisualElementPackager _packager;
@@ -74,6 +76,8 @@ namespace Axemasta.SuperWebView.iOS
 		{
             _userController = config.UserContentController;
             _disposables = new List<IDisposable>();
+
+            _navigationDelegate = new SuperWebViewNavigationDelegate(this);
 		}
 
         #region Methods
@@ -107,7 +111,7 @@ namespace Axemasta.SuperWebView.iOS
                     WebView.GoBackRequested += OnGoBackRequested;
                     WebView.GoForwardRequested += OnGoForwardRequested;
                     WebView.ReloadRequested += OnReloadRequested;
-                    NavigationDelegate = new SuperWebViewNavigationDelegate(this);
+                    NavigationDelegate = _navigationDelegate;
                     UIDelegate = new SuperWebViewUIDelegate();
 
                     BackgroundColor = UIColor.Clear;
@@ -211,7 +215,9 @@ namespace Axemasta.SuperWebView.iOS
 
             var titleUrl = !string.IsNullOrEmpty(title) ? title : url.AbsoluteString;
 
-            LoadHtmlString(html, url);
+            this.LoadHtmlString(html, url);
+
+            //this.LoadFileUrl()
 
             WebView.SendUrlChanged(new UrlEventArgs(titleUrl));
         }
@@ -299,8 +305,16 @@ namespace Axemasta.SuperWebView.iOS
                 return;
             }
 
-            webViewController.CanGoBack = this.CanGoBack;
-            webViewController.CanGoForward = this.CanGoForward;
+            if (_navigationDelegate.IsPageLocal())
+            {
+                webViewController.CanGoBack = true;
+                webViewController.CanGoForward = this.CanGoForward;
+            }
+            else
+            {
+                webViewController.CanGoBack = this.CanGoBack;
+                webViewController.CanGoForward = this.CanGoForward;
+            }
 
             WebView.SendCanGoBackwardsChanged(EventArgs.Empty);
             WebView.SendCanGoForwardsChanged(EventArgs.Empty);
@@ -385,6 +399,17 @@ namespace Axemasta.SuperWebView.iOS
 
         void OnGoBackRequested(object sender, EventArgs eventArgs)
         {
+            if (_navigationDelegate.IsPageLocal())
+            {
+                _lastBackForwardEvent = WebNavigationEvent.Back;
+
+                var urlRequest = new NSUrlRequest(_navigationDelegate.GetLastWebsite());
+
+                this.LoadRequest(urlRequest);
+
+                return;
+            }
+
             if (CanGoBack)
             {
                 _lastBackForwardEvent = WebNavigationEvent.Back;
