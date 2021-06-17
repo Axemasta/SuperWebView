@@ -9,4 +9,4 @@ steps:
     command: 'push'
     packagesToPush: '$(System.DefaultWorkingDirectory)/**/*.nupkg;!$(System.DefaultWorkingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: '${{ parameters.feedId }}
+    publishVstsFeed: ${{ parameters.feedId }}
