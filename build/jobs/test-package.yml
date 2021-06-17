@@ -16,10 +16,4 @@ jobs:
     clean: all
 
   steps:
-  - script: |
-    echo 'Printing variables'
-    echo 'Assembly Version: $(assemblyVersion)'
-    echo 'MajorMinor Version: $(version.Major).$(version.Minor)'
-    echo 'Revision Version: $(version.Revision)'
-    echo 'Version Number: $(versionNumber)'
-  displayName: Print Variables
+  - template: ../steps/announce-version.yml
