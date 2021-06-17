@@ -18,9 +18,22 @@ variables:
   version.Build: $[counter(variables['build'], 1)]
   versionNumber: $(version.Major).$(version.Minor).$(version.Revision)
   assemblyVersion: $(version.Major).$(version.Minor).$(version.Revision).$(version.Build)
+  vmImage: macOS-latest
+  isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
 
 stages:
   - stage: buildTest
     displayName: Build & Test
     jobs:
       - template: jobs/test-package.yml
+        parameters:
+          vmImage: $(vmImage)
+
+  - stage: buildpublish
+    displayName: Build & Publish
+    dependsOn: buildTest
+    condition: and(succeeded(), eq(variables.isPR, false))
+    jobs:
+      - template: jobs/publish-package.yml
+        parameters:
+          vmImage: $(vmImage)

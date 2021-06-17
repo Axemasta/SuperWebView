@@ -1,0 +1,33 @@
+# Build Library, Publish Artifacts Ready For Distribution
+
+parameters:
+  solution: '**/*.sln'
+  vmImage: macOS-latest
+  buildConfiguration: 'Release'
+
+jobs:
+- job: buildArtifacts
+  dispayName: Build Package Artifacts
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+    demands:
+    - MSBuild
+  workspace:
+    clean: all
+  steps:
+
+  - template: ../steps/set-runtime.yml
+
+  - template: ../steps/prepare-build.yml
+    parameters:
+      solution: ${{ parameters.solution }}
+
+  - template: ../steps/set-assembly-info.yml
+
+  - template: ../steps/build.yml
+    parameters:
+      solution: ${{ parameters.solution }}
+
+  - template: ../steps/publish-artifacts.yml
+    parameters:
+      feedId: $(Axemasta.GitHubPackages.FeedId)

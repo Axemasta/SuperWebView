@@ -1,0 +1,26 @@
+# Sets the assembly info for the Axemasta.SuperWebView package
+
+steps:
+- task: Assembly-Info-NetCore@2
+  displayName: 'Set Assembly Info'
+  inputs:
+    Path: '$(Build.SourcesDirectory)'
+    FileNames: '**/Axemasta.SuperWebView.csproj'
+    InsertAttributes: true
+    FileEncoding: 'auto'
+    WriteBOM: false
+    GeneratePackageOnBuild: true
+    Authors: 'Axemasta'
+    Product: 'Axemasta.SuperWebView'
+    Description: 'WebView Replacement Component For Xamarin.Forms.WebView'
+    PackageProjectUrl: 'https://github.com/Axemasta/SuperWebView'
+    RepositoryUrl: 'https://github.com/Axemasta/SuperWebView'
+    PackageReleaseNotes: 'TODO'
+    Culture: 'en-GB'
+    VersionNumber: '$(assemblyVersion)'
+    FileVersionNumber: '$(assemblyVersion)'
+    InformationalVersion: '$(versionNumber)'
+    PackageVersion: '$(versionNumber)'
+    LogLevel: 'verbose'
+    FailOnWarning: false
+    DisableTelemetry: false
