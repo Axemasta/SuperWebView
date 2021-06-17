@@ -1,0 +1,25 @@
+# Prepares the pipeline for a build
+
+parameters:
+  solution: '**/*.sln'
+
+steps:
+- task: UseDotNet@2
+  displayName: Use global.json .NET Version
+  inputs:
+    packageType: 'sdk'
+    useGlobalJson: true
+
+- task: NuGetToolInstaller@1
+  displayName: Use latest NuGet
+  inputs:
+    checkLatest: true
+
+- task: NuGetCommand@2
+  displayName: 'Restore NuGet Packages'
+  inputs:
+    command: 'restore'
+    restoreSolution: ${{ parameters.solution }}
+    feedsToUse: 'select'
+    noCache: true
+    verbosityRestore: normal

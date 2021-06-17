@@ -1,0 +1,12 @@
+# Publishes NuGet Packages To Axemasta's Private Feed
+
+parameters:
+  feedId: '00000000-0000-0000-0000-000000000000'
+
+steps:
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(System.DefaultWorkingDirectory)/**/*.nupkg;!$(System.DefaultWorkingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '${{ parameters.feedId }}

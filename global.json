@@ -1,0 +1,11 @@
+{
+	"sdk": {
+		"version": "5.0.203",
+		"rollForward": "latestMinor",
+		"allowPrerelease": false
+	},
+	"msbuild-sdks": {
+		"MSBuild.Sdk.Extras": "3.0.23",
+		"Microsoft.Build.CentralPackageVersions": "2.0.79"
+	}
+}

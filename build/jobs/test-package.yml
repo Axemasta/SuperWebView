@@ -17,3 +17,13 @@ jobs:
 
   steps:
   - template: ../steps/announce-version.yml
+
+  - template: ../steps/prepare-build.yml
+    parameters:
+      solution: ${{ parameters.solution }}
+  
+  - template: ../steps/test.yml
+    parameters:
+      projects: '**/*Tests.csproj'
+      buildConfiguration: ${{ parameters.buildConfiguration }}
+      publishResults: true

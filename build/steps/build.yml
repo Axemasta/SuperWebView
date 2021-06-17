@@ -1,0 +1,13 @@
+# Builds the solution
+
+parameters:
+  solution: '**/*.sln'
+  buildConfiguration: 'Release'
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    command: 'build'
+    arguments: '--configuration ${{ parameters.buildConfiguration }}'
+    projects: ${{ parameters.solution }}

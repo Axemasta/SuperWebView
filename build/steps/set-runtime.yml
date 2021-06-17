@@ -1,0 +1,37 @@
+parameters:
+  jdkTestFolder: $(XA.Jdk11.Folder)
+
+steps:
+# For more information on what versions of Xcode are available see the following:
+# https://github.com/microsoft/azure-pipelines-image-generation/blob/master/images/macos/macos-10.15-Readme.md
+- task: CmdLine@2
+  inputs:
+    script: '/bin/bash -c "echo ''##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]''$(xcodeRoot);sudo xcode-select --switch $(xcodeRoot)/Contents/Developer"'
+
+- task: UseDotNet@2
+  displayName: 'Use global.json SDK'
+  inputs:
+    packageType: 'sdk'
+    useGlobalJson: true
+
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '11'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
+# https://github.com/xamarin/xamarin-android/issues/5999
+
+- script: echo '##vso[task.setvariable variable=JI_JAVA_HOME]$(JAVA_HOME_11_X64)'
+  displayName: set JI_JAVA_HOME
+
+- script: |
+    export JI_JAVA_HOME="$JAVA_HOME_11_X64"
+  displayName: Set Java Home Path
+
+- script: |
+    dotnet tool install --global boots --ignore-failed-sources
+    boots --stable Mono
+    boots --stable XamarinAndroid
+    boots --stable XamariniOS
+  displayName: Ensure Latest Xamarin & Mono SDKs
