@@ -1,0 +1,25 @@
+# Build, Test & Publish The Test Results
+
+parameters:
+  solution: '**/*.sln'
+  vmImage: windows-latest
+  buildConfiguration: 'Release'
+
+jobs:
+- job: runTests
+  displayName: Perform Tests
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+    demands:
+    - MSBuild
+  workspace:
+    clean: all
+
+  steps:
+  - script: |
+    echo 'Printing variables'
+    echo 'Assembly Version: $(assemblyVersion)'
+    echo 'MajorMinor Version: $(version.Major).$(version.Minor)'
+    echo 'Revision Version: $(version.Revision)'
+    echo 'Version Number: $(versionNumber)'
+  displayName: Print Variables

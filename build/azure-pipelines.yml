@@ -1,0 +1,26 @@
+trigger:
+  branches:
+    include:
+    - main
+    - azure-pipeline
+  paths:
+    include:
+    - src/*
+    - build/*
+    exclude:
+      - README.md
+
+variables:
+  buildConfiguration: 'Release'
+  version.Major: 0
+  version.Minor: 1
+  version.Revision: $[counter(format('{0}.{1}_{2}', variables['version.Major'], variables['version.Minor'], eq(variables['Build.Reason'], 'PullRequest')), 0)]
+  version.Build: $[counter(variables['build'], 1)]
+  versionNumber: $(version.Major).$(version.Minor).$(version.Revision)
+  assemblyVersion: $(version.Major).$(version.Minor).$(version.Revision).$(version.Build)
+
+stages:
+  - stage: buildTest
+    displayName: Build & Test
+    jobs:
+      - template: jobs/test-package.yml
