@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Axemasta.SuperWebView.PlatformConfiguration.iOSSpecific;
 using Axemasta.SuperWebView.Sample.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -10,8 +11,20 @@ namespace Axemasta.SuperWebView.Sample.Pages
 {
     public partial class BrowserPage : ContentPage
     {
+        Lazy<string> _coolPage;
         Lazy<string> _blockPage;
         Lazy<string> _localBaseUrl;
+
+        string LoadCoolPage()
+        {
+            Debug.WriteLine("LoadBlockPage - Executing lazy load");
+
+            var assemblyName = typeof(BrowserPage).Assembly.FullName;
+
+            var page = EmbeddedResourceHelper.Load("Axemasta.SuperWebView.Sample.Views.CoolPage.html", assemblyName);
+
+            return page;
+        }
 
         string LoadBlockPage()
         {
@@ -43,6 +56,10 @@ namespace Axemasta.SuperWebView.Sample.Pages
             On<Xamarin.Forms.PlatformConfiguration.iOS>()
                 .SetUseSafeArea(true);
 
+            superWebView.On<Xamarin.Forms.PlatformConfiguration.iOS>()
+                .SetAllowsLinkPreview(false);
+
+            _coolPage = new Lazy<string>(LoadCoolPage, true);
             _blockPage = new Lazy<string>(LoadBlockPage, true);
             _localBaseUrl = new Lazy<string>(LoadBaseUrl, true);
 
@@ -80,7 +97,7 @@ namespace Axemasta.SuperWebView.Sample.Pages
         {
             Debug.WriteLine("Load local page");
 
-            var html = _blockPage.Value;
+            var html = _coolPage.Value;
             var baseUrl = _localBaseUrl.Value;
 
             var htmlWebSource = new SuperHtmlWebViewSource()
@@ -149,9 +166,28 @@ namespace Axemasta.SuperWebView.Sample.Pages
                 bool canBrowse = await CanBrowse(e.Url);
 
                 if (!canBrowse)
+                {
                     e.Cancel();
+                }
 
                 token.Complete();
+
+                if (e.Cancelled)
+                {
+                    var html = _blockPage.Value;
+                    var baseUrl = _localBaseUrl.Value;
+
+                    html = html.Replace("${blockedSite}", e.Url);
+
+                    var htmlWebSource = new SuperHtmlWebViewSource()
+                    {
+                        Html = html,
+                        BaseUrl = baseUrl,
+                        Title = "Site Blocked"
+                    };
+
+                    superWebView.Source = htmlWebSource;
+                }
             }
         }
 
@@ -164,7 +200,18 @@ namespace Axemasta.SuperWebView.Sample.Pages
         {
             await Task.Delay(1000);
 
-            return !url.Contains("bbc.co.uk");
+            try
+            {
+                var uri = new Uri(url);
+
+                var isBbc = uri.Host.Contains("bbc.co.uk");
+
+                return !isBbc;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

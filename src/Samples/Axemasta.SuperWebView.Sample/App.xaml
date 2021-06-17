@@ -43,11 +43,13 @@
 
             <Style TargetType="Button" ApplyToDerivedTypes="True">
                 <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextColor_DarkMode}, Light={StaticResource TextColor_LightMode}}"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
             </Style>
 
             <Style x:Key="BaseContentPage" TargetType="ContentPage">
                 <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource BackgroundColor_DarkMode}, Light={StaticResource BackgroundColor_LightMode}}"/>
             </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

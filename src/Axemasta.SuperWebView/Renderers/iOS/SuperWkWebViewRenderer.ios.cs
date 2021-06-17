@@ -14,6 +14,7 @@ using WebKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.iOS;
+using iOSSuperWebView = Axemasta.SuperWebView.PlatformConfiguration.iOSSpecific.SuperWebView;
 using PreserveAttribute = Foundation.PreserveAttribute;
 using RectangleF = System.Drawing.RectangleF;
 
@@ -113,6 +114,10 @@ namespace Axemasta.SuperWebView.iOS
                     WebView.ReloadRequested += OnReloadRequested;
                     NavigationDelegate = _navigationDelegate;
                     UIDelegate = new SuperWebViewUIDelegate();
+
+                    var allowsLinkPreview = iOSSuperWebView.GetAllowsLinkPreview(Element);
+
+                    this.AllowsLinkPreview = allowsLinkPreview;
 
                     BackgroundColor = UIColor.Clear;
 
@@ -600,7 +605,50 @@ namespace Axemasta.SuperWebView.iOS
 
         public async Task SyncNativeCookiesToElement(string url)
         {
+            if (string.IsNullOrWhiteSpace(url))
+                return;
 
+            var myCookieJar = WebView.Cookies;
+            if (myCookieJar == null)
+                return;
+
+            var uri = CreateUriForCookies(url);
+            if (uri == null)
+                return;
+
+            var cookies = myCookieJar.GetCookies(uri);
+            var retrieveCurrentWebCookies = await GetCookiesFromNativeStore(url);
+
+            foreach (var nscookie in retrieveCurrentWebCookies)
+            {
+                if (cookies[nscookie.Name] == null)
+                {
+                    string cookieH = $"{nscookie.Name}={nscookie.Value}; domain={nscookie.Domain}; path={nscookie.Path}";
+
+                    myCookieJar.SetCookies(uri, cookieH);
+                }
+            }
+
+            foreach (Cookie cookie in cookies)
+            {
+                NSHttpCookie nSHttpCookie = null;
+
+                foreach (var findCookie in retrieveCurrentWebCookies)
+                {
+                    if (findCookie.Name == cookie.Name)
+                    {
+                        nSHttpCookie = findCookie;
+                        break;
+                    }
+                }
+
+                if (nSHttpCookie == null)
+                    cookie.Expired = true;
+                else
+                    cookie.Value = nSHttpCookie.Value;
+            }
+
+            await SyncNativeCookies(url);
         }
 
         async Task SetCookie(List<Cookie> cookies)
