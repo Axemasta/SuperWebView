@@ -7,7 +7,7 @@ parameters:
 
 jobs:
 - job: buildArtifacts
-  dispayName: Build Package Artifacts
+  displayName: Build Package Artifacts
   pool:
     vmImage: ${{ parameters.vmImage }}
     demands:
