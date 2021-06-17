@@ -20,6 +20,7 @@ variables:
   assemblyVersion: $(version.Major).$(version.Minor).$(version.Revision).$(version.Build)
   vmImage: macOS-latest
   isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
+  xcodeRoot: '/Applications/Xcode_12.5.app' #https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#xcode
 
 stages:
   - stage: buildTest
