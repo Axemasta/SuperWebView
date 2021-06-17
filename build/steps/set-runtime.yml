@@ -4,9 +4,9 @@ parameters:
 steps:
 # For more information on what versions of Xcode are available see the following:
 # https://github.com/microsoft/azure-pipelines-image-generation/blob/master/images/macos/macos-10.15-Readme.md
-- task: CmdLine@2
-  inputs:
-    script: '/bin/bash -c "echo ''##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]''$(xcodeRoot);sudo xcode-select --switch $(xcodeRoot)/Contents/Developer"'
+# - task: CmdLine@2
+#   inputs:
+#     script: '/bin/bash -c "echo ''##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]''$(xcodeRoot);sudo xcode-select --switch $(xcodeRoot)/Contents/Developer"'
 
 - task: UseDotNet@2
   displayName: 'Use global.json SDK'
