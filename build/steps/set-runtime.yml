@@ -9,6 +9,9 @@ steps:
 
 - script: build/scripts/xcode-update.sh
   displayName: Force Xcode Update
+  env:
+    xcodeOverride: $(xcodeOverride)
+  condition: ne(variables['xcodeOverride'], '')
 
 - task: UseDotNet@2
   displayName: 'Use global.json SDK'
