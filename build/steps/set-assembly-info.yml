@@ -12,9 +12,10 @@ steps:
     GeneratePackageOnBuild: true
     Authors: 'Axemasta'
     Product: 'Axemasta.SuperWebView'
-    Description: 'WebView Replacement Component For Xamarin.Forms.WebView'
+    Description: 'Fork of Xamarin.Forms.WebView with common custom renderer features as standard'
     PackageProjectUrl: 'https://github.com/Axemasta/SuperWebView'
     RepositoryUrl: 'https://github.com/Axemasta/SuperWebView'
+    PackageLicenseUrl: 'https://github.com/Axemasta/SuperWebView/blob/main/LICENSE'
     PackageReleaseNotes: 'TODO'
     Culture: 'en-GB'
     VersionNumber: '$(assemblyVersion)'
