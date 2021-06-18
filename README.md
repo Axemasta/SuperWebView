@@ -16,3 +16,14 @@ The original `WebView` components does not best support complicated scenarios su
 ## Better Platform Customisaton
 
 The native platforms have some cool features which can be quite hard to tap into, this control aims to allow you to specifically override the behaviour of native api's, and easily reintegrate back into the forms control.
+
+## NuGet Package
+
+This library is available on NuGet.org, you should install it into all of your Forms projects (shared, ios, android).
+
+| Package                                    | NuGet                                    |
+|--------------------------------------------|------------------------------------------|
+| [Axemasta.SuperWebView][SuperWebViewNuGet] | ![SuperWebViewShield][SuperWebViewNuGet] |
+
+[SuperWebViewNuGet]: https://www.nuget.org/packages/Axemasta.SuperWebView/
+[SuperWebViewShield]: https://img.shields.io/nuget/v/Axemasta.SuperWebView
