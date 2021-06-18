@@ -3,7 +3,7 @@ parameters:
 
 steps:
 
-- script: sudo build/scripts/xcode-update.sh
+- script: sudo ../scripts/xcode-update.sh
   displayName: Force Xcode Update
   env:
     XcodeOverride: $(XcodeOverride)
