@@ -3,11 +3,8 @@ parameters:
 
 steps:
 
-- script: sudo ../scripts/xcode-update.sh
+- script: ../scripts/xcode-update.sh
   displayName: Force Xcode Update
-  env:
-    XcodeOverride: $(XcodeOverride)
-  condition: ne(variables['XcodeOverride'], '')
 
 - task: UseDotNet@2
   displayName: 'Use global.json SDK'
