@@ -10,7 +10,7 @@ steps:
 - script: build/scripts/xcode-update.sh
   displayName: Force Xcode Update
   env:
-    xcodeVersion: $(xcodeOverride)
+    xcodeVersion: $(xcodeVersion)
   condition: ne(variables['xcodeOverride'], '')
 
 - task: UseDotNet@2

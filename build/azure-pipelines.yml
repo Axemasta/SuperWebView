@@ -13,15 +13,15 @@ trigger:
 variables:
   buildConfiguration: 'Release'
   version.Major: 0
-  version.Minor: 1
+  version.Minor: 2
   version.Revision: $[counter(format('{0}.{1}_{2}', variables['version.Major'], variables['version.Minor'], eq(variables['Build.Reason'], 'PullRequest')), 0)]
   version.Build: $[counter(variables['build'], 1)]
   versionNumber: $(version.Major).$(version.Minor).$(version.Revision)
   assemblyVersion: $(version.Major).$(version.Minor).$(version.Revision).$(version.Build)
   vmImage: macOS-10.15
   isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
-  xcodeOverride: 12.5
-  xcodeRoot: '/Applications/Xcode_$(xcodeOverride).app' #https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#xcode
+  xcodeVersion: 12.4
+  xcodeRoot: '/Applications/Xcode_$(xcodeVersion).app' #https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#xcode
   buildPlatform: Any CPU
 
 stages:
