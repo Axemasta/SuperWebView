@@ -18,10 +18,6 @@ jobs:
 
   - template: ../steps/set-runtime.yml
 
-  - template: ../steps/prepare-build.yml
-    parameters:
-      solution: ${{ parameters.solution }}
-
   - template: ../steps/set-assembly-info.yml
 
   - template: ../steps/build.yml

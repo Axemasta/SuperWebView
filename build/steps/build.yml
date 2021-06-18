@@ -3,11 +3,26 @@
 parameters:
   solution: '**/*.sln'
   buildConfiguration: 'Release'
+  msbuildArguments: '/p:JavaSdkDirectory="$(JAVA_HOME)"'
 
 steps:
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet build'
+
+- template: prepare-build.yml
+  parameters:
+    solution: ${{ parameters.solution }}
+
+# - task: DotNetCoreCLI@2
+#   displayName: 'dotnet build'
+#   inputs:
+#     command: 'build'
+#     arguments: '--configuration ${{ parameters.buildConfiguration }}'
+#     projects: ${{ parameters.solution }}
+
+- task: MSBuild@1
+  displayName: Build ${{ parameters.solutionName }}
   inputs:
-    command: 'build'
-    arguments: '--configuration ${{ parameters.buildConfiguration }}'
-    projects: ${{ parameters.solution }}
+    solution: ${{ parameters.solution }}
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    msbuildArguments: ${{ parameters.msbuildArguments }}
+    maximumCpuCount: true
