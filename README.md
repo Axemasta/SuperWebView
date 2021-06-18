@@ -23,9 +23,7 @@ This library is available on NuGet.org, you should install it into all of your F
 
 | Package                                    | NuGet                                                        |
 | ------------------------------------------ | ------------------------------------------------------------ |
-| [Axemasta.SuperWebView][SuperWebViewNuGet] | [![SuperWebViewNuGet][SuperWebViewNuGetShield]](https://www.nuget.org/packages/Axemasta.SuperWebView/) |
-
-![SuperWebViewNuGet][SuperWebViewNuGetShield]
+| [Axemasta.SuperWebView][SuperWebViewNuGet] | ![SuperWebViewNuGetShield][SuperWebViewNuGet] |
 
 [SuperWebViewNuGet]: https://www.nuget.org/packages/Axemasta.SuperWebView/
-[SuperWebViewNuGetShield]: https://img.shields.io/nuget/v/Axemasta.SuperWebView
+[SuperWebViewNuGetShield]: https://img.shields.io/nuget/v/Axemasta.SuperWebView.svg
