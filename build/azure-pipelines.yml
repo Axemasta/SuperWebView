@@ -25,17 +25,17 @@ variables:
   buildPlatform: Any CPU
 
 stages:
-  # - stage: buildTest
-  #   displayName: Build & Test
-  #   jobs:
-  #     - template: jobs/test-package.yml
-  #       parameters:
-  #         vmImage: $(vmImage)
+  - stage: buildTest
+    displayName: Build & Test
+    jobs:
+      - template: jobs/test-package.yml
+        parameters:
+          vmImage: $(vmImage)
 
   - stage: buildpublish
     displayName: Build & Publish
-    # dependsOn: buildTest
-    # condition: and(succeeded(), eq(variables.isPR, false))
+    dependsOn: buildTest
+    condition: and(succeeded(), eq(variables.isPR, false))
     jobs:
       - template: jobs/publish-package.yml
         parameters:
