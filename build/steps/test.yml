@@ -1,0 +1,22 @@
+parameters:
+  projects: '**/*Tests.csproj'
+  buildConfiguration: 'Release'
+  publishResults: true
+
+steps:
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test'
+  inputs:
+    command: 'test'
+    projects: ${{ parameters.projects }}
+    configuration: ${{ parameters.buildConfiguration }}
+    testRunTitle: 'Test Run $(Build.BuildId)'
+    arguments: '/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+    publishTestResults: ${{ parameters.publishResults }}
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Code Coverage Report'
+  condition: eq(${{ parameters.publishResults }}, true)
+  inputs:
+    codeCoverageTool: 'cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'

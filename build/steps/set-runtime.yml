@@ -1,0 +1,42 @@
+parameters:
+  jdkTestFolder: $(XA.Jdk11.Folder)
+
+steps:
+
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/shell-script?view=azure-devops#example
+- script: chmod +x build/scripts/xcode-update.sh
+  displayName: chmod xcode-update.sh
+
+- script: build/scripts/xcode-update.sh
+  displayName: Force Xcode Update
+  env:
+    xcodeVersion: $(xcodeVersion)
+  condition: ne(variables['xcodeOverride'], '')
+
+- task: UseDotNet@2
+  displayName: 'Use global.json SDK'
+  inputs:
+    packageType: 'sdk'
+    useGlobalJson: true
+
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '11'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+
+# https://github.com/xamarin/xamarin-android/issues/5999
+
+- script: echo '##vso[task.setvariable variable=JI_JAVA_HOME]$(JAVA_HOME_11_X64)'
+  displayName: set JI_JAVA_HOME
+
+- script: |
+    export JI_JAVA_HOME="$JAVA_HOME_11_X64"
+  displayName: Set Java Home Path
+
+- script: |
+    dotnet tool install --global boots --ignore-failed-sources
+    boots --stable Mono
+    boots --stable XamarinAndroid
+    boots --stable XamariniOS
+  displayName: Ensure Latest Xamarin & Mono SDKs

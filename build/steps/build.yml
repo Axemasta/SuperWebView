@@ -1,0 +1,21 @@
+# Builds the solution
+
+parameters:
+  solution: '**/*.sln'
+  buildConfiguration: 'Release'
+  msbuildArguments: '/p:JavaSdkDirectory="$(JAVA_HOME)"'
+
+steps:
+
+- template: prepare-build.yml
+  parameters:
+    solution: ${{ parameters.solution }}
+    
+- task: MSBuild@1
+  displayName: Build ${{ parameters.solutionName }}
+  inputs:
+    solution: ${{ parameters.solution }}
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    msbuildArguments: ${{ parameters.msbuildArguments }}
+    maximumCpuCount: true

@@ -1,0 +1,29 @@
+# Build, Test & Publish The Test Results
+
+parameters:
+  solution: '**/*.sln'
+  vmImage: windows-latest
+  buildConfiguration: 'Release'
+
+jobs:
+- job: runTests
+  displayName: Perform Tests
+  pool:
+    vmImage: ${{ parameters.vmImage }}
+    demands:
+    - MSBuild
+  workspace:
+    clean: all
+
+  steps:
+  - template: ../steps/announce-version.yml
+
+  - template: ../steps/prepare-build.yml
+    parameters:
+      solution: ${{ parameters.solution }}
+  
+  - template: ../steps/test.yml
+    parameters:
+      projects: '**/*Tests.csproj'
+      buildConfiguration: ${{ parameters.buildConfiguration }}
+      publishResults: true

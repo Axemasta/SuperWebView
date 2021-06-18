@@ -2,8 +2,6 @@
 {
     public class EmbeddedJavaScript : JavaScript
     {
-        public bool Exists { get; }
-
         public string Path { get; }
 
         public string AssemblyName { get; }
