@@ -3,7 +3,7 @@ parameters:
 
 steps:
 
-- script: ../scripts/xcode-update.sh
+- script: build/scripts/xcode-update.sh
   displayName: Force Xcode Update
 
 - task: UseDotNet@2
