@@ -1,7 +1,7 @@
 #!/bin/bash
 # https://github.com/PrismLibrary/Prism/blob/master/build/scripts/xcode-update.sh
-echo "Setting Xcode Override to: $xcodeRoot"
-xcodeRoot=/Applications/Xcode_$xcodeOverride.app
+echo "Setting Xcode Override to: $xcodeVersion"
+xcodeRoot=/Applications/Xcode_$xcodeVersion.app
 
 
 echo '##vso[task.setvariable variable=MD_APPLE_SDK_ROOT;]'$xcodeRoot
