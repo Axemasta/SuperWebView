@@ -21,9 +21,11 @@ The native platforms have some cool features which can be quite hard to tap into
 
 This library is available on NuGet.org, you should install it into all of your Forms projects (shared, ios, android).
 
-| Package                                    | NuGet                                    |
-|--------------------------------------------|------------------------------------------|
-| [Axemasta.SuperWebView][SuperWebViewNuGet] | ![SuperWebViewShield][SuperWebViewNuGet] |
+| Package                                    | NuGet                                                        |
+| ------------------------------------------ | ------------------------------------------------------------ |
+| [Axemasta.SuperWebView][SuperWebViewNuGet] | [![SuperWebViewNuGet][SuperWebViewNuGetShield]](https://www.nuget.org/packages/Axemasta.SuperWebView/) |
+
+![SuperWebViewNuGet][SuperWebViewNuGetShield]
 
 [SuperWebViewNuGet]: https://www.nuget.org/packages/Axemasta.SuperWebView/
-[SuperWebViewShield]: https://img.shields.io/nuget/v/Axemasta.SuperWebView
+[SuperWebViewNuGetShield]: https://img.shields.io/nuget/v/Axemasta.SuperWebView
