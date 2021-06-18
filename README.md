@@ -46,7 +46,7 @@ This library is available on NuGet.org, you should install it into all of your F
 
 | Package                                    | NuGet                                                        |
 | ------------------------------------------ | ------------------------------------------------------------ |
-| [Axemasta.SuperWebView][SuperWebViewNuGet] | ![SuperWebViewNuGet][SuperWebViewNuGetShield] |
+| [Axemasta.SuperWebView][SuperWebViewNuGet] | ![SuperWebViewNuGetShield][SuperWebViewNuGet] |
 
 ## Sample App
 
