@@ -22,7 +22,7 @@ jobs:
 
   - template: ../steps/build.yml
     parameters:
-      solution: ${{ parameters.solution }}
+      solution: '**/Axemasta.SuperWebView.csproj'
 
   - template: ../steps/publish-artifacts.yml
     parameters:
