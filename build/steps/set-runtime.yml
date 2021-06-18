@@ -3,6 +3,10 @@ parameters:
 
 steps:
 
+  # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/shell-script?view=azure-devops#example
+- script: chmod +x build/scripts/xcode-update.sh
+  displayName: chmod xcode-update.sh
+
 - script: build/scripts/xcode-update.sh
   displayName: Force Xcode Update
 
