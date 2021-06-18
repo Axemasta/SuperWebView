@@ -11,6 +11,7 @@ steps:
   displayName: Force Xcode Update
   env:
     xcodeOverride: $(xcodeOverride)
+    xcodeRoot: $(xcodeRoot)
   condition: ne(variables['xcodeOverride'], '')
 
 - task: UseDotNet@2
