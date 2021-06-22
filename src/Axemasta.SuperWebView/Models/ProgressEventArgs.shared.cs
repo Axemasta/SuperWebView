@@ -18,9 +18,9 @@ namespace Axemasta.SuperWebView
 
         public ProgressEventArgs(double progress, int maximum)
         {
-            NormalisedProgress = progress / maximum * 100;
+            NormalisedProgress = Math.Round(progress / maximum, 4);
 
-            PercentageComplete = Math.Round(NormalisedProgress, 2);
+            PercentageComplete = Math.Round(NormalisedProgress * 100, 2);
         }
     }
 }
