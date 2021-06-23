@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using CoreFoundation;
 using Foundation;
 using WebKit;
 using Xamarin.Forms;
@@ -189,6 +190,7 @@ namespace Axemasta.SuperWebView.iOS
 			if (!args.DeferralRequested)
 			{
 				decisionHandler(WKNavigationActionPolicy.Allow);
+				return;
 			}
 		}
 
@@ -246,22 +248,44 @@ namespace Axemasta.SuperWebView.iOS
 			 * Completion handler passed to -[Xamarin_Forms_Platform_iOS_WkWebViewRenderer_CustomWebViewNavigationDelegate webView:decidePolicyForNavigationAction:decisionHandler:] was not called
 			 */
 
-			Func<Task> navigationTask = () => Task.Run(() => DetermineNavigating(args, decisionHandler));
+			/*
+			 * The previous implementation was causing a crash when the UI invoked a url change by performing
+			 * an action like pressing a Button and updating the SuperWebView source.
+			 * 
+			 * The crash had very limited diagnostics but here is a diagnostic from the simulator:
+			 * 10:06:35.541054+0100	com.apple.CoreSimulator.SimDevice.00000000-0000-0000-0000-000000000000
+			 * (UIKitApplication:com.axemasta.SuperWebViewSample[f025][rb-legacy][86754]) 
+			 * Service exited due to SIGTRAP
+			 * 
+			 * I found the following xamarin-macios posts:
+			 * https://github.com/xamarin/xamarin-macios/issues/4130
+			 * https://github.com/xamarin/xamarin-macios/pull/4312/files
+			 * 
+			 * It looks like when blocking a thread, it must be released back on the main thread otherwise the WKWebView
+			 * will crash. I have updated the implementation to directly access the iOS threads because Device.BeginInvoke...
+			 * was still causing the issue to occur
+			 */
 
-			if (Device.IsInvokeRequired)
-				await Device.InvokeOnMainThreadAsync(navigationTask);
-			else
-				await navigationTask();
+			Action action = () => DetermineNavigating(args, decisionHandler);
+
+			if (NSThread.IsMain)
+            {
+				action.Invoke();
+				return;
+            }
+
+			DispatchQueue.MainQueue.DispatchSync(action);
 		}
 
 		void DetermineNavigating(SuperWebNavigatingEventArgs args, Action<WKNavigationActionPolicy> decisionHandler)
 		{
+			
 			var action = args.Cancelled ? WKNavigationActionPolicy.Cancel : WKNavigationActionPolicy.Allow;
 
 			if (action == WKNavigationActionPolicy.Cancel)
 				WebView.SendNavigationCancelled(new NavigationCancelledEventArgs(args.Url));
 
-            decisionHandler(action);
-        }
-	}
+			decisionHandler(action);
+		}
+    }
 }
