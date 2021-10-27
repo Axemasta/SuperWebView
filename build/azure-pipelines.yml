@@ -3,6 +3,7 @@ trigger:
     include:
     - main
     - azure-pipeline
+    - pre-release
   paths:
     include:
     - src/*
@@ -20,6 +21,7 @@ variables:
   assemblyVersion: $(version.Major).$(version.Minor).$(version.Revision).$(version.Build)
   vmImage: macOS-10.15
   isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
+  isPreRelease: $[ne(variables['Build.SourceBranchName'], 'main')]
   xcodeVersion: 12.4
   xcodeRoot: '/Applications/Xcode_$(xcodeVersion).app' #https://github.com/actions/virtual-environments/blob/main/images/macos/macos-10.15-Readme.md#xcode
   buildPlatform: Any CPU
