@@ -55,37 +55,60 @@ namespace Axemasta.SuperWebView.Droid
 
         async void LoadUrl(string url, bool fireNavigatingCanceled)
         {
-            if (!fireNavigatingCanceled || !await SendNavigatingCanceledAsync(url))
+            var navigatingCanceled = await SendNavigatingCanceledAsync(url);
+
+            if (navigatingCanceled)
             {
-                _eventState = WebNavigationEvent.NewPage;
-                Control.LoadUrl(url);
+                Log.Warning("Diagnostics", "Navigation was cancelled");
+                return;
             }
+
+            if (fireNavigatingCanceled)
+            {
+                Log.Warning("Diagnostics", "Fire Navigating Canceled was true");
+                return;
+            }
+
+            _eventState = WebNavigationEvent.NewPage;
+            Control.LoadUrl(url);
         }
 
         protected internal async Task<bool> SendNavigatingCanceledAsync(string url)
         {
-            if (Element == null || string.IsNullOrWhiteSpace(url))
-                return true;
-
-            if (url == AndroidConstants.AssetBaseUrl)
-                return false;
-
-            var args = new SuperWebNavigatingEventArgs(_eventState, new SuperUrlWebViewSource { Url = url }, url, true);
-            SyncNativeCookies(url);
-            ElementController.SendNavigating(args);
-            UpdateCanGoBackForward();
-
-            var cancel = false;
-
-            if (args.DeferralRequested)
+            try
             {
-                cancel = !await Task.Run(() => args.DeferredTask);
+                if (Element == null || string.IsNullOrWhiteSpace(url))
+                    return true;
+
+                if (url == AndroidConstants.AssetBaseUrl)
+                    return false;
+
+                var args = new SuperWebNavigatingEventArgs(_eventState, new SuperUrlWebViewSource { Url = url }, url, true);
+                SyncNativeCookies(url);
+                ElementController.SendNavigating(args);
+                UpdateCanGoBackForward();
+
+                var cancel = false;
+
+                if (args.DeferralRequested)
+                {
+                    Log.Warning("diagnostics", "deferral requested, unwrapping deferred task");
+
+                    cancel = !await Task.Run(() => args.DeferredTask)
+                        .ConfigureAwait(true);
+                }
+
+                if (cancel)
+                    SuperWebView.SendNavigationCancelled(new NavigationCancelledEventArgs(url));
+
+                return cancel;
             }
-
-            if (cancel)
-                SuperWebView.SendNavigationCancelled(new NavigationCancelledEventArgs(url));
-
-            return cancel;
+            catch (Exception ex)
+            {
+                Log.Warning("diagnostics", "an exception occurred sending navigating cancelled");
+                Log.Warning("diagnostics", ex.ToString());
+                return false;
+            }
         }
 
         protected override void Dispose(bool disposing)
