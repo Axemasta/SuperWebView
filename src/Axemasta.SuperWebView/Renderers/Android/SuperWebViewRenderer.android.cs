@@ -55,22 +55,11 @@ namespace Axemasta.SuperWebView.Droid
 
         async void LoadUrl(string url, bool fireNavigatingCanceled)
         {
-            var navigatingCanceled = await SendNavigatingCanceledAsync(url);
-
-            if (navigatingCanceled)
+            if (!fireNavigatingCanceled || !await SendNavigatingCanceledAsync(url))
             {
-                Log.Warning("Diagnostics", "Navigation was cancelled");
-                return;
+                _eventState = WebNavigationEvent.NewPage;
+                Control.LoadUrl(url);
             }
-
-            if (fireNavigatingCanceled)
-            {
-                Log.Warning("Diagnostics", "Fire Navigating Canceled was true");
-                return;
-            }
-
-            _eventState = WebNavigationEvent.NewPage;
-            Control.LoadUrl(url);
         }
 
         protected internal async Task<bool> SendNavigatingCanceledAsync(string url)
