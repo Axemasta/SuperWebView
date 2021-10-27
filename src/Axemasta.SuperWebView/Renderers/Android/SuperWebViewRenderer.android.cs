@@ -75,40 +75,41 @@ namespace Axemasta.SuperWebView.Droid
 
         protected internal async Task<bool> SendNavigatingCanceledAsync(string url)
         {
-            try
+            if (Element == null || string.IsNullOrWhiteSpace(url))
+                return true;
+
+            if (url == AndroidConstants.AssetBaseUrl)
+                return false;
+
+            var args = new SuperWebNavigatingEventArgs(_eventState, new SuperUrlWebViewSource { Url = url }, url, true);
+            SyncNativeCookies(url);
+            ElementController.SendNavigating(args);
+            UpdateCanGoBackForward();
+
+            var cancel = false;
+
+            if (args.DeferralRequested)
             {
-                if (Element == null || string.IsNullOrWhiteSpace(url))
-                    return true;
-
-                if (url == AndroidConstants.AssetBaseUrl)
-                    return false;
-
-                var args = new SuperWebNavigatingEventArgs(_eventState, new SuperUrlWebViewSource { Url = url }, url, true);
-                SyncNativeCookies(url);
-                ElementController.SendNavigating(args);
-                UpdateCanGoBackForward();
-
-                var cancel = false;
-
-                if (args.DeferralRequested)
+                try
                 {
-                    Log.Warning("diagnostics", "deferral requested, unwrapping deferred task");
-
                     cancel = !await Task.Run(() => args.DeferredTask)
                         .ConfigureAwait(true);
                 }
-
-                if (cancel)
-                    SuperWebView.SendNavigationCancelled(new NavigationCancelledEventArgs(url));
-
-                return cancel;
+                catch (TaskCanceledException)
+                {
+                    // If this throws it will brick the execution
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning("diagnostics", "an exception occurred sending navigating cancelled");
+                    Log.Warning("diagnostics", ex.ToString());
+                }
             }
-            catch (Exception ex)
-            {
-                Log.Warning("diagnostics", "an exception occurred sending navigating cancelled");
-                Log.Warning("diagnostics", ex.ToString());
-                return false;
-            }
+
+            if (cancel)
+                SuperWebView.SendNavigationCancelled(new NavigationCancelledEventArgs(url));
+
+            return cancel;
         }
 
         protected override void Dispose(bool disposing)
