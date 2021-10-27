@@ -16,9 +16,11 @@ jobs:
     clean: all
   steps:
 
-  - script: echo '##vso[task.setvariable variable=versionName]$(versionName)-pre'
-    displayName: 'Set Pre Release Version'
-    condition: eq(variables.isPreRelease, true)
+  # - script: echo '##vso[task.setvariable variable=versionName]$(versionName)-pre'
+  #   displayName: 'Set Pre Release Version'
+  #   condition: eq(variables.isPreRelease, true)
+
+  - template: ../steps/announce-version.yml
 
   - template: ../steps/set-runtime.yml
 
