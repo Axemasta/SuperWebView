@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Axemasta.SuperWebView.PlatformConfiguration.iOSSpecific;
+using Axemasta.SuperWebView.PlatformConfiguration.AndroidSpecific;
 using Axemasta.SuperWebView.Sample.Services;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Axemasta.SuperWebView.Sample.Pages
@@ -53,11 +55,14 @@ namespace Axemasta.SuperWebView.Sample.Pages
         {
             InitializeComponent();
 
-            On<Xamarin.Forms.PlatformConfiguration.iOS>()
+            On<iOS>()
                 .SetUseSafeArea(true);
 
-            superWebView.On<Xamarin.Forms.PlatformConfiguration.iOS>()
+            superWebView.On<iOS>()
                 .SetAllowsLinkPreview(false);
+
+            superWebView.On<Android>()
+                .SetHardeningEnabled(false);
 
             _coolPage = new Lazy<string>(LoadCoolPage, true);
             _blockPage = new Lazy<string>(LoadBlockPage, true);
