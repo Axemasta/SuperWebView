@@ -14,7 +14,7 @@ using WebKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.iOS;
-using iOSSuperWebView = Axemasta.SuperWebView.PlatformConfiguration.iOSSpecific.SuperWebView;
+using Axemasta.SuperWebView.PlatformConfiguration.iOSSpecific;
 using PreserveAttribute = Foundation.PreserveAttribute;
 using RectangleF = System.Drawing.RectangleF;
 
@@ -115,7 +115,7 @@ namespace Axemasta.SuperWebView.iOS
                     NavigationDelegate = _navigationDelegate;
                     UIDelegate = new SuperWebViewUIDelegate();
 
-                    var allowsLinkPreview = iOSSuperWebView.GetAllowsLinkPreview(Element);
+                    var allowsLinkPreview = iOSConfiguration.GetAllowsLinkPreview(Element);
 
                     this.AllowsLinkPreview = allowsLinkPreview;
 

@@ -4,9 +4,11 @@
     using FormsElement = Axemasta.SuperWebView.SuperWebView;
     using iOS = Xamarin.Forms.PlatformConfiguration.iOS;
 
-    public static class SuperWebView
+    public static class iOSConfiguration
     {
-        public static readonly BindableProperty AllowsLinkPreviewProperty = BindableProperty.Create("AllowLinkPreview", typeof(bool), typeof(SuperWebView), false);
+        #region Allows Link Preview
+
+        public static readonly BindableProperty AllowsLinkPreviewProperty = BindableProperty.Create("AllowLinkPreview", typeof(bool), typeof(iOSConfiguration), false);
 
         public static IPlatformElementConfiguration<iOS, FormsElement> SetAllowsLinkPreview(this IPlatformElementConfiguration<iOS, FormsElement> config, bool value)
         {
@@ -23,5 +25,7 @@
         {
             return (bool)element.GetValue(AllowsLinkPreviewProperty);
         }
+
+        #endregion Allows Link Preview
     }
 }

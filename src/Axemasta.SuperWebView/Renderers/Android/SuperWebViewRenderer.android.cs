@@ -12,6 +12,7 @@ using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
 using AWebView = Android.Webkit.WebView;
 using AMixedContentHandling = Android.Webkit.MixedContentHandling;
 using Axemasta.SuperWebView.Internals;
+using Axemasta.SuperWebView.PlatformConfiguration.AndroidSpecific;
 
 namespace Axemasta.SuperWebView.Droid
 {
@@ -27,7 +28,8 @@ namespace Axemasta.SuperWebView.Droid
 
         protected internal SuperWebView SuperWebView => Element as SuperWebView;
 
-        public SuperWebViewRenderer(Context context) : base(context)
+        public SuperWebViewRenderer(Context context)
+            : base(context)
         {
             AutoPackage = false;
         }
@@ -107,6 +109,7 @@ namespace Axemasta.SuperWebView.Droid
                 return;
 
             _isDisposed = true;
+
             if (disposing)
             {
                 if (Element != null)
@@ -146,7 +149,21 @@ namespace Axemasta.SuperWebView.Droid
         {
             var webView = new AWebView(Context);
             webView.Settings.SetSupportMultipleWindows(true);
+
             return webView;
+        }
+
+        public void SetHardeningMode()
+        {
+            if (Control is null || Element is null)
+                return;
+
+            var hardening = AndroidConfiguration.GetHardeningEnabled(Element);
+
+            // If hardening enabled, prevent these from occuring
+            this.Control.Settings.AllowFileAccess = !hardening;
+            this.Control.Settings.AllowFileAccessFromFileURLs = !hardening;
+            this.Control.Settings.AllowContentAccess = !hardening;
         }
 
         internal WebNavigationEvent GetCurrentWebNavigationEvent()
@@ -190,6 +207,8 @@ namespace Axemasta.SuperWebView.Droid
                 webView.Settings.JavaScriptEnabled = true;
                 webView.Settings.DomStorageEnabled = true;
                 SetNativeControl(webView);
+
+                SetHardeningMode();
 
                 //Control.SetWebViewClient(new JavascriptWebViewClient(this, _scripts));
                 webView.AddJavascriptInterface(new JSBridge(this), AndroidConstants.JSBridge);
