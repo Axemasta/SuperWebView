@@ -106,7 +106,7 @@ namespace Axemasta.SuperWebView.PlatformConfiguration.AndroidSpecific
 
 		#region Hardening Enabled
 
-		public static readonly BindableProperty HardeningEnabledProperty = BindableProperty.Create("HardeningEnabled", typeof(bool), typeof(FormsElement), true);
+		public static readonly BindableProperty HardeningEnabledProperty = BindableProperty.Create("HardeningEnabled", typeof(bool), typeof(FormsElement), false);
 
 		public static IPlatformElementConfiguration<AndroidPlatform, FormsElement> SetHardeningEnabled(this IPlatformElementConfiguration<AndroidPlatform, FormsElement> config, bool value)
 		{
