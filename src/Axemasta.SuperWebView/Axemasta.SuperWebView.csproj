@@ -4,6 +4,9 @@
     <TargetFrameworks>netstandard2.0;Xamarin.iOS10;MonoAndroid10.0;</TargetFrameworks>
     <Configurations>Debug;Release</Configurations>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Title>Drop In WebView Replacement For Xamarin.Forms</Title>
+    <Description>Alternate WebView implementation with many common features implemented as standard</Description>
+    <PackageTags>webview;xamarin;xamarin.forms;axemasta</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)'=='Debug' ">

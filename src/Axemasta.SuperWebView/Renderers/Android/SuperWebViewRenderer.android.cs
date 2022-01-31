@@ -79,7 +79,20 @@ namespace Axemasta.SuperWebView.Droid
 
             if (args.DeferralRequested)
             {
-                cancel = !await Task.Run(() => args.DeferredTask);
+                try
+                {
+                    cancel = !await Task.Run(() => args.DeferredTask)
+                        .ConfigureAwait(true);
+                }
+                catch (TaskCanceledException)
+                {
+                    // If this throws it will brick the execution
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning("diagnostics", "an exception occurred sending navigating cancelled");
+                    Log.Warning("diagnostics", ex.ToString());
+                }
             }
 
             if (cancel)
