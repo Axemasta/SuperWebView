@@ -39,9 +39,9 @@ namespace Axemasta.SuperWebView.Droid
 			return await _renderer.SendNavigatingCanceledAsync(url);
 		}
 
+		// api 19-23
 		[Obsolete("ShouldOverrideUrlLoading(view,url) is obsolete as of version 4.0.0. This method was deprecated in API level 24.")]
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		// api 19-23
 		public override bool ShouldOverrideUrlLoading(WView view, string url)
         {
 			OverrideUrlLoading(url, () => SendNavigatingCanceledAsync(url));

@@ -25,11 +25,13 @@
   <ItemGroup Condition=" '$(Configuration)'=='Debug' ">
     <!-- Manage Xamarin.Forms version for development -->
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+	<PackageReference Include="Ardalis.GuardClauses" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(Configuration)'=='Release' ">
     <!-- Manage Xamarin.Forms version for distribution -->
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+	<PackageReference Include="Ardalis.GuardClauses" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

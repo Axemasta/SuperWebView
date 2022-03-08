@@ -7,16 +7,15 @@ namespace Axemasta.SuperWebView.iOS
 {
     public class SuperWebViewUIDelegate : WKUIDelegate
     {
-		static string LocalOK = NSBundle.FromIdentifier("com.apple.UIKit").GetLocalizedString("OK");
-		static string LocalCancel = NSBundle.FromIdentifier("com.apple.UIKit").GetLocalizedString("Cancel");
+		private static readonly string _localOK = NSBundle.FromIdentifier("com.apple.UIKit").GetLocalizedString("OK");
+		private static readonly string _localCancel = NSBundle.FromIdentifier("com.apple.UIKit").GetLocalizedString("Cancel");
 
 		public override void RunJavaScriptAlertPanel(WKWebView webView, string message, WKFrameInfo frame, Action completionHandler)
 		{
 			PresentAlertController(
 				webView,
 				message,
-				okAction: _ => completionHandler()
-			);
+				okAction: _ => completionHandler());
 		}
 
 		public override void RunJavaScriptConfirmPanel(WKWebView webView, string message, WKFrameInfo frame, Action<bool> completionHandler)
@@ -25,8 +24,7 @@ namespace Axemasta.SuperWebView.iOS
 				webView,
 				message,
 				okAction: _ => completionHandler(true),
-				cancelAction: _ => completionHandler(false)
-			);
+				cancelAction: _ => completionHandler(false));
 		}
 
 		public override void RunJavaScriptTextInputPanel(
@@ -37,8 +35,7 @@ namespace Axemasta.SuperWebView.iOS
 				prompt,
 				defaultText: defaultText,
 				okAction: x => completionHandler(x.TextFields[0].Text),
-				cancelAction: _ => completionHandler(null)
-			);
+				cancelAction: _ => completionHandler(null));
 		}
 
 		static string GetJsAlertTitle(WKWebView webView)
@@ -55,7 +52,7 @@ namespace Axemasta.SuperWebView.iOS
 
 		static UIAlertAction AddOkAction(UIAlertController controller, Action handler)
 		{
-			var action = UIAlertAction.Create(LocalOK, UIAlertActionStyle.Default, (_) => handler());
+			var action = UIAlertAction.Create(_localOK, UIAlertActionStyle.Default, (_) => handler());
 			controller.AddAction(action);
 			controller.PreferredAction = action;
 			return action;
@@ -63,7 +60,7 @@ namespace Axemasta.SuperWebView.iOS
 
 		static UIAlertAction AddCancelAction(UIAlertController controller, Action handler)
 		{
-			var action = UIAlertAction.Create(LocalCancel, UIAlertActionStyle.Cancel, (_) => handler());
+			var action = UIAlertAction.Create(_localCancel, UIAlertActionStyle.Cancel, (_) => handler());
 			controller.AddAction(action);
 			return action;
 		}

@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Axemasta.SuperWebView
 {
     public class BrowserInvocationEventArgs : EventArgs

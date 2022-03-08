@@ -1,5 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Axemasta.SuperWebView
 {
@@ -10,13 +9,13 @@ namespace Axemasta.SuperWebView
         public SuperWebViewSource Source { get; set; }
 
         public string Url { get; set; }
-        
+
         public SuperWebNavigatingEventArgs(WebNavigationEvent navigationEvent, SuperWebViewSource source, string url, bool canCancel)
             : base(canCancel)
         {
             NavigationEvent = navigationEvent;
             Source = source;
             Url = url;
-        }   
+        }
     }
 }

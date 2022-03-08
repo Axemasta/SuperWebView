@@ -7,8 +7,9 @@ namespace Axemasta.SuperWebView.UnitTests
     public class ProgressEventArgsTests
     {
         [Test]
+
         // iOS Tests
-        [TestCase(0.1, 1, 0.1, 10)]        
+        [TestCase(0.1, 1, 0.1, 10)]
         [TestCase(1, 1, 1, 100)]
         [TestCase(0, 1, 0, 0)]
         [TestCase(0.1454833984375, 1, 0.1455, 14.55)]

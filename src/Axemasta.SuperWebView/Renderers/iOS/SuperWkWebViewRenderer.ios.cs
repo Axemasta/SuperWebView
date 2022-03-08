@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Axemasta.SuperWebView.Internals;
+using Axemasta.SuperWebView.PlatformConfiguration.iOSSpecific;
+using Foundation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -7,21 +10,18 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Axemasta.SuperWebView.Internals;
-using Foundation;
 using UIKit;
 using WebKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.iOS;
-using Axemasta.SuperWebView.PlatformConfiguration.iOSSpecific;
 using PreserveAttribute = Foundation.PreserveAttribute;
 using RectangleF = System.Drawing.RectangleF;
 
 namespace Axemasta.SuperWebView.iOS
 {
     public class SuperWkWebViewRenderer : WKWebView, IVisualElementRenderer, ISuperWebViewDelegate, IEffectControlProvider, ITabStop, IWKScriptMessageHandler
-	{
+    {
         public SuperWebView WebView => Element as SuperWebView;
 
         public VisualElement Element { get; private set; }
@@ -45,7 +45,7 @@ namespace Axemasta.SuperWebView.iOS
         protected virtual void OnElementChanged(VisualElementChangedEventArgs e) =>
             ElementChanged?.Invoke(this, e);
 
-        //TODO: Fix violation of encapsulation
+        // TODO: Fix violation of encapsulation
         public bool _ignoreSourceChanges;
         public WebNavigationEvent _lastBackForwardEvent;
 
@@ -60,26 +60,24 @@ namespace Axemasta.SuperWebView.iOS
         private WKUserContentController _userController;
 
         VisualElementPackager _packager;
-//#pragma warning disable CS0414
+
         VisualElementTracker _tracker;
-//#pragma warning restore CS0414
 
         [Preserve(Conditional = true)]
-		public SuperWkWebViewRenderer()
+        public SuperWkWebViewRenderer()
             : this(WKWebViewHelper.CreatedPooledConfiguration())
-		{
+        {
+        }
 
-		}
-
-		[Preserve(Conditional = true)]
-		public SuperWkWebViewRenderer(WKWebViewConfiguration config)
-			: base(RectangleF.Empty, config)
-		{
+        [Preserve(Conditional = true)]
+        public SuperWkWebViewRenderer(WKWebViewConfiguration config)
+            : base(RectangleF.Empty, config)
+        {
             _userController = config.UserContentController;
             _disposables = new List<IDisposable>();
 
             _navigationDelegate = new SuperWebViewNavigationDelegate(this);
-		}
+        }
 
         #region Methods
 
@@ -222,7 +220,7 @@ namespace Axemasta.SuperWebView.iOS
 
             this.LoadHtmlString(html, url);
 
-            //this.LoadFileUrl()
+            // this.LoadFileUrl()
 
             WebView.SendUrlChanged(new UrlEventArgs(titleUrl));
         }
@@ -256,7 +254,7 @@ namespace Axemasta.SuperWebView.iOS
             {
                 // If we got a format exception trying to parse the URI, it might be because
                 // someone is passing in a local bundled file page. If we can find a better way
-                // to detect that scenario, we should use it; until then, we'll fall back to 
+                // to detect that scenario, we should use it; until then, we'll fall back to
                 // local file loading here and see if that works:
                 if (!LoadFile(url))
                 {
@@ -350,8 +348,8 @@ namespace Axemasta.SuperWebView.iOS
                 _pendingUrl = null;
 
                 // I realize this looks like the worst hack ever but iOS 11 and cookies are super quirky
-                // and this is the only way I could figure out how to get iOS 11 to inject a cookie 
-                // the first time a WkWebView is used in your app. This only has to run the first time a WkWebView is used 
+                // and this is the only way I could figure out how to get iOS 11 to inject a cookie
+                // the first time a WkWebView is used in your app. This only has to run the first time a WkWebView is used
                 // anywhere in the application. All subsequents uses of WkWebView won't hit this hack
                 // Even if it's a WkWebView on a new page.
                 // read through this thread https://developer.apple.com/forums/thread/99674
@@ -396,7 +394,7 @@ namespace Axemasta.SuperWebView.iOS
 
         async Task<string> OnEvaluateJavaScriptRequested(string script)
         {
-            //TODO: Use ConfigureAwait?
+            // TODO: Use ConfigureAwait?
             var result = await EvaluateJavaScriptAsync(script);
 
             return result?.ToString();
@@ -439,7 +437,6 @@ namespace Axemasta.SuperWebView.iOS
         {
             try
             {
-
                 await SyncNativeCookies(Url?.AbsoluteUrl?.ToString());
             }
             catch (Exception exc)
@@ -494,7 +491,7 @@ namespace Axemasta.SuperWebView.iOS
             base.Dispose(disposing);
         }
 
-        #endregion Cleanup Methods
+        #endregion - Cleanup Methods
 
         #endregion Methods
 
@@ -575,9 +572,9 @@ namespace Axemasta.SuperWebView.iOS
 
                 // This code is used to only push updates to cookies that have changed.
                 // This doesn't quite work on on iOS 10 if we have to delete any cookies.
-                // I haven't found a way on iOS 10 to remove individual cookies. 
+                // I haven't found a way on iOS 10 to remove individual cookies.
                 // The trick we use on Android with writing a cookie that expires doesn't work
-                // So on iOS10 if the user wants to remove any cookies we just delete 
+                // So on iOS10 if the user wants to remove any cookies we just delete
                 // the cookie for the entire domain inside of DeleteCookies and then rewrite
                 // all the cookies
                 if (Forms.IsiOS11OrNewer || deleteCookies.Count == 0)
@@ -691,11 +688,11 @@ namespace Axemasta.SuperWebView.iOS
                     cookieBuilder.Append($"; Max-Age={jCookie.Expires.Subtract(DateTime.UtcNow).TotalSeconds}");
                 }
 
-                if (!String.IsNullOrWhiteSpace(jCookie.Domain))
+                if (!string.IsNullOrWhiteSpace(jCookie.Domain))
                 {
                     cookieBuilder.Append($"; Domain={jCookie.Domain}");
                 }
-                if (!String.IsNullOrWhiteSpace(jCookie.Domain))
+                if (!string.IsNullOrWhiteSpace(jCookie.Domain))
                 {
                     cookieBuilder.Append($"; Path={jCookie.Path}");
                 }
@@ -745,7 +742,6 @@ namespace Axemasta.SuperWebView.iOS
 
                                     break;
                                 }
-
                             }
                         }
                     });
@@ -784,10 +780,11 @@ namespace Axemasta.SuperWebView.iOS
 
         async Task<List<NSHttpCookie>> GetCookiesFromNativeStore(string url)
         {
-            NSHttpCookie[] _initialCookiesLoaded = null;
+            NSHttpCookie[] initialCookiesLoaded = null;
+
             if (Forms.IsiOS11OrNewer)
             {
-                _initialCookiesLoaded = await Configuration.WebsiteDataStore.HttpCookieStore.GetAllCookiesAsync();
+                initialCookiesLoaded = await Configuration.WebsiteDataStore.HttpCookieStore.GetAllCookiesAsync();
             }
             else
             {
@@ -803,19 +800,19 @@ namespace Axemasta.SuperWebView.iOS
                         extractCookies.SetCookies(uri, cookie);
 
                     var extracted = extractCookies.GetCookies(uri);
-                    _initialCookiesLoaded = new NSHttpCookie[extracted.Count];
+                    initialCookiesLoaded = new NSHttpCookie[extracted.Count];
                     for (int i = 0; i < extracted.Count; i++)
                     {
-                        _initialCookiesLoaded[i] = new NSHttpCookie(extracted[i]);
+                        initialCookiesLoaded[i] = new NSHttpCookie(extracted[i]);
                     }
                 }
             }
 
-            _initialCookiesLoaded = _initialCookiesLoaded ?? new NSHttpCookie[0];
+            initialCookiesLoaded = initialCookiesLoaded ?? new NSHttpCookie[0];
 
             List<NSHttpCookie> existingCookies = new List<NSHttpCookie>();
             string domain = CreateUriForCookies(url).Host;
-            foreach (var cookie in _initialCookiesLoaded)
+            foreach (var cookie in initialCookiesLoaded)
             {
                 // we don't care that much about this being accurate
                 // the cookie container will split the cookies up more correctly
@@ -828,6 +825,6 @@ namespace Axemasta.SuperWebView.iOS
             return existingCookies;
         }
 
-        #endregion Cookies
+        #endregion Cookies - Move To Cookie Manager
     }
 }

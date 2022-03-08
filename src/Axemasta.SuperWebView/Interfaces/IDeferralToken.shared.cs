@@ -1,5 +1,4 @@
-﻿using System;
-namespace Axemasta.SuperWebView
+﻿namespace Axemasta.SuperWebView
 {
     public interface IDeferralToken
     {

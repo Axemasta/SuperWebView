@@ -274,12 +274,15 @@ namespace Axemasta.SuperWebView.Droid
                 case "Source":
                     Load();
                     break;
+
                 case "MixedContentMode":
                     UpdateMixedContentMode();
                     break;
+
                 case "EnableZoomControls":
                     UpdateEnableZoomControls();
                     break;
+
                 case "DisplayZoomControls":
                     UpdateDisplayZoomControls();
                     break;
@@ -300,7 +303,7 @@ namespace Axemasta.SuperWebView.Droid
 
             if (Uri.TryCreate(url, UriKind.Absolute, out uri))
             {
-                if (String.IsNullOrWhiteSpace(uri.Host))
+                if (string.IsNullOrWhiteSpace(uri.Host))
                     return null;
 
                 return uri;
@@ -499,18 +502,25 @@ namespace Axemasta.SuperWebView.Droid
 
         class JavascriptResult : Java.Lang.Object, IValueCallback
         {
-            TaskCompletionSource<string> source;
-            public Task<string> JsResult { get { return source.Task; } }
+            TaskCompletionSource<string> _source;
+
+            public Task<string> JsResult
+            {
+                get
+                {
+                    return _source.Task;
+                }
+            }
 
             public JavascriptResult()
             {
-                source = new TaskCompletionSource<string>();
+                _source = new TaskCompletionSource<string>();
             }
 
             public void OnReceiveValue(Java.Lang.Object result)
             {
                 string json = ((Java.Lang.String)result).ToString();
-                source.SetResult(json);
+                _source.SetResult(json);
             }
         }
     }

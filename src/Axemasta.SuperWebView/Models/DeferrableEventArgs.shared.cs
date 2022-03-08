@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -81,7 +80,6 @@ namespace Axemasta.SuperWebView
 		}
 
 		internal Task<bool> DeferredTask => _deferredTaskCompletionSource?.Task;
-		internal bool Animate { get; set; }
 
 		public bool DeferralRequested { get; set; }
 

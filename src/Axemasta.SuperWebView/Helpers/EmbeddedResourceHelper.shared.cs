@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ardalis.GuardClauses;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -13,13 +14,13 @@ namespace Axemasta.SuperWebView
         /// <summary>
         /// Load Resource From Assembly
         /// </summary>
-        /// <param name="resourceName"></param>
-        /// <param name="assemblyName"></param>
-        /// <returns></returns>
+        /// <param name="resourceName">Name of the resource to load</param>
+        /// <param name="assemblyName">Name of the assembly the resource coincides</param>
+        /// <returns>The embedded resource content as a string</returns>
         public static string Load(string resourceName, string assemblyName)
         {
-            if (string.IsNullOrEmpty(resourceName)) throw new ArgumentNullException(nameof(resourceName));
-            if (string.IsNullOrEmpty(assemblyName)) throw new ArgumentNullException(nameof(assemblyName));
+            resourceName = Guard.Against.NullOrEmpty(resourceName, nameof(resourceName));
+            assemblyName = Guard.Against.NullOrEmpty(assemblyName, nameof(assemblyName));
 
             Assembly assembly = Assembly.Load(assemblyName);
 
@@ -43,7 +44,6 @@ namespace Axemasta.SuperWebView
                     return streamReader.ReadToEnd();
                 }
             }
-
         }
     }
 }

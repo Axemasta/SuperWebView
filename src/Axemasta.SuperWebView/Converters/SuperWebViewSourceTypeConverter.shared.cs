@@ -10,7 +10,7 @@ namespace Axemasta.SuperWebView
 		{
 			if (value == null)
 				throw new InvalidOperationException(string.Format("Cannot convert \"{0}\" into {1}", value, typeof(SuperUrlWebViewSource)));
-			
+
 			return new SuperUrlWebViewSource { Url = value };
 		}
 

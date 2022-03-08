@@ -18,7 +18,7 @@ namespace Axemasta.SuperWebView.iOS
             /*
              * https://developer.apple.com/forums/thread/99674
              * WKWebView and making sure cookies synchronize is really quirky
-             * The main workaround I've found for ensuring that cookies synchronize 
+             * The main workaround I've found for ensuring that cookies synchronize
              * is to share the Process Pool between all WkWebView instances.
              * It also has to be shared at the point you call init
              */
