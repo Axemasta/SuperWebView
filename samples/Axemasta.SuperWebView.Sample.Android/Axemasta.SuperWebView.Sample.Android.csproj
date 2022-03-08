@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -89,17 +89,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
-    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Axemasta.SuperWebView.Sample\Axemasta.SuperWebView.Sample.csproj">
-      <Project>{F81087F0-B9E0-4F6C-B53C-561B053FD478}</Project>
-      <Name>Axemasta.SuperWebView.Sample</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Axemasta.SuperWebView\Axemasta.SuperWebView.csproj">
-      <Project>{73BBC8E3-42C8-40D3-BF3A-6FAE8F0C540D}</Project>
+    <ProjectReference Include="..\..\src\Axemasta.SuperWebView\Axemasta.SuperWebView.csproj">
+      <Project>{6dd80a3d-7687-4521-aedb-560e4a1718b2}</Project>
       <Name>Axemasta.SuperWebView</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Axemasta.SuperWebView.Sample\Axemasta.SuperWebView.Sample.csproj">
+      <Project>{45f6d11f-69cb-464b-befb-368fa2ad3192}</Project>
+      <Name>Axemasta.SuperWebView.Sample</Name>
+    </ProjectReference>
   </ItemGroup>
- <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

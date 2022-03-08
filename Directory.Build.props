@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+    <PropertyGroup>
+        <Authors>Axemasta</Authors>
+        <Copyright>© Axemasta. All rights reserved.</Copyright>
+        <NeutralLanguage>en-GB</NeutralLanguage>
+        <IncludeSymbols>true</IncludeSymbols>
+        <IncludeSource>True</IncludeSource>
+        <!-- <PackageIcon>TODO</PackageIcon> -->
+        <PackageProjectUrl>https://github.com/Axemasta/SuperWebView</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Axemasta/SuperWebView.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>webview xamarin.forms</PackageTags>
+        <PackageReleaseNotes>See the GitHub Release Notes</PackageReleaseNotes>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+        <LangVersion>latest</LangVersion>
+        <!-- <Nullable>enable</Nullable> --><!-- TODO: Turn this on -->
+        <!-- <WarningsAsErrors>nullable</WarningsAsErrors> -->
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)Axemasta.SuperWebView.ruleset</CodeAnalysisRuleSet>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" PrivateAssets="All" />
+        <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" InProject="false" />
+    </ItemGroup>
+
+</Project>

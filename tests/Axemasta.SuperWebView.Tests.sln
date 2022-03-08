@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32002.261
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axemasta.SuperWebView", "..\src\Axemasta.SuperWebView\Axemasta.SuperWebView.csproj", "{A274D30F-FB18-4003-AB8D-14928180A026}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EC6A7341-7E21-4A3D-A90E-5DD8F1541EB7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Axemasta.SuperWebView.UnitTests", "Axemasta.SuperWebView.UnitTests\Axemasta.SuperWebView.UnitTests.csproj", "{2DB61C40-58AB-494A-AA6F-7B286D04D844}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A274D30F-FB18-4003-AB8D-14928180A026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A274D30F-FB18-4003-AB8D-14928180A026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A274D30F-FB18-4003-AB8D-14928180A026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A274D30F-FB18-4003-AB8D-14928180A026}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DB61C40-58AB-494A-AA6F-7B286D04D844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DB61C40-58AB-494A-AA6F-7B286D04D844}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DB61C40-58AB-494A-AA6F-7B286D04D844}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DB61C40-58AB-494A-AA6F-7B286D04D844}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2DB61C40-58AB-494A-AA6F-7B286D04D844} = {EC6A7341-7E21-4A3D-A90E-5DD8F1541EB7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {120A1BC6-EE27-4FA9-AA9B-B43E6AFA160F}
+	EndGlobalSection
+EndGlobal

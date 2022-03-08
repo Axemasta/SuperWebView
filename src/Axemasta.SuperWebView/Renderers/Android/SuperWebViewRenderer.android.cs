@@ -1,18 +1,18 @@
-﻿using System;
+﻿using Android.Content;
+using Android.Webkit;
+using Axemasta.SuperWebView.Internals;
+using Axemasta.SuperWebView.PlatformConfiguration.AndroidSpecific;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net;
 using System.Threading.Tasks;
-using Android.Content;
-using Android.Webkit;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
-using AWebView = Android.Webkit.WebView;
 using AMixedContentHandling = Android.Webkit.MixedContentHandling;
-using Axemasta.SuperWebView.Internals;
-using Axemasta.SuperWebView.PlatformConfiguration.AndroidSpecific;
+using AWebView = Android.Webkit.WebView;
 
 namespace Axemasta.SuperWebView.Droid
 {
@@ -22,8 +22,11 @@ namespace Axemasta.SuperWebView.Droid
         FormsSuperWebViewClient _webViewClient;
         FormsSuperWebChromeClient _webChromeClient;
         bool _isDisposed = false;
+
         protected internal ISuperWebViewController ElementController => Element;
+
         protected internal bool IgnoreSourceChanges { get; set; }
+
         protected internal string UrlCanceled { get; set; }
 
         protected internal SuperWebView SuperWebView => Element as SuperWebView;
@@ -198,19 +201,13 @@ namespace Axemasta.SuperWebView.Droid
                 webView.SetWebChromeClient(_webChromeClient);
                 _webChromeClient.ProgressChanged += OnProgressChanged;
 
-                //if (Context.IsDesignerContext())
-                //{
-                //    SetNativeControl(webView);
-                //    return;
-                //}
-
                 webView.Settings.JavaScriptEnabled = true;
                 webView.Settings.DomStorageEnabled = true;
                 SetNativeControl(webView);
 
                 SetHardeningMode();
 
-                //Control.SetWebViewClient(new JavascriptWebViewClient(this, _scripts));
+                // Control.SetWebViewClient(new JavascriptWebViewClient(this, _scripts));
                 webView.AddJavascriptInterface(new JSBridge(this), AndroidConstants.JSBridge);
 
                 InjectJSBridge();

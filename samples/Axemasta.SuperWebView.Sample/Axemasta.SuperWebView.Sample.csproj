@@ -20,9 +20,6 @@
     <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.759" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Axemasta.SuperWebView\Axemasta.SuperWebView.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Pages\" />
     <Folder Include="Scripts\" />
     <Folder Include="Views\" />
@@ -39,5 +36,8 @@
     <EmbeddedResource Include="Scripts\spy.js" />
     <EmbeddedResource Include="Views\BlockPage.html" />
     <EmbeddedResource Include="Views\CoolPage.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Axemasta.SuperWebView\Axemasta.SuperWebView.csproj" />
   </ItemGroup>
 </Project>
