@@ -9,10 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{7947
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3300E84E-6B1A-4654-BC7F-F3C8B16A111C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Dependencies", "External Dependencies", "{98655D4F-ED65-47FF-B507-AD0FBB25F2E9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{98655D4F-ED65-47FF-B507-AD0FBB25F2E9}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		..\Directory.Build.props = ..\Directory.Build.props
+		..\global.json = ..\global.json
 	EndProjectSection
 EndProject
 Global
